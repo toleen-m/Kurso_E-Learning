@@ -11,3 +11,94 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+
+enum Role {
+  ETUDIANT
+  FORMATEUR
+  ADMIN
+}
+
+enum Niveau {
+  DEBUTANT
+  INTERMEDIAIRE
+  AVANCE
+}
+
+enum Statut {
+  EN_COURS
+  TERMINE
+  ABANDONNE
+}
+
+
+//----- MODELES --------
+
+model Utilisateur {
+  id          Int       @id @default(autoincrement())
+  email       String    @unique
+  password    String
+  nom         String
+  role        Role      @default(ETUDIANT)
+  createdAt   DateTime  @default(now())
+  inscriptions Inscription[]
+}
+
+model Cours {
+  id          Int       @id @default(autoincrement())
+  titre       String    @unique
+  description String
+  niveau      Niveau    @default(DEBUTANT)
+  lecons      Lecon[]
+
+          //etudiants   Etudiant[]: relation (N -N) est gerer par Inscription
+
+  createdAt   DateTime  @default(now())
+  inscriptions Inscription[]
+}
+
+model Inscription {
+  id               Int            @id @default(autoincrement())
+  statut           Statut         @default(EN_COURS)
+  progression      Float    //%
+
+  utilisateurId    Int
+  coursId          Int
+
+  utilisateur      Utilisateur    @relation(fields: [utilisateurId], references: [id])
+  cours            Cours          @relation(fields: [coursId], references: [id])
+
+  createdAt        DateTime       @default(now())
+
+  // empêche un étudiant de s'inscrire deux fois au même cours
+  @@unique([utilisateurId, coursId])
+}
+
+model Lecon {
+  id          Int       @id @default(autoincrement())
+  titre       String
+  contenu     String
+  ordre       Int
+
+  //relier le lecon à son cours
+  coursId     Int       
+  cours       Cours     @relation(fields: [coursId], references: [id])
+
+  quiz        Quiz[]
+
+  // titre de leçon doit être unique par cours
+  @@unique([coursId, titre]) 
+}
+
+model Quiz {
+  id          Int       @id @default(autoincrement())
+  titre       String
+  score       Float
+
+  //relier le quiz à sa leçon
+  leconId     Int        
+  lecon       Lecon      @relation(fields: [leconId], references: [id])
+
+  questions   String    @unique     // id externe -> anti-doublon //////////////
+}
+

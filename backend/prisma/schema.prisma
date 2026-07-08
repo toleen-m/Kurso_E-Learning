@@ -99,6 +99,15 @@ model Quiz {
   leconId     Int        
   lecon       Lecon      @relation(fields: [leconId], references: [id])
 
-  questions   String    @unique     // id externe -> anti-doublon //////////////
+  questions   Question[]
+}
+
+model Question {
+  id          Int       @id @default(autoincrement())
+  enonce      String
+  reponse     String
+  
+  quizId      Int
+  quiz        Quiz   @relation(fields: [quizId], references: [id])
 }
 

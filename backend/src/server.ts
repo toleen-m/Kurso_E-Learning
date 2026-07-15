@@ -4,6 +4,7 @@ import prisma from "./utils/prisma.js"
 import routerAuth from "./routes/auth.routes.js"
 import { authentifier } from "./middleswares/auth.middleware.js"
 import { autoriser } from "./middleswares/role.middleware.js"
+import quizRoutes from "./routes/quiz.routes.js"
 dotenv.config()
 
 const app = express()
@@ -32,8 +33,9 @@ app.get(
 
     }
 )
-//localhost:3000/auth/...
 
+//localhost:3000/auth/...
+app.use("/api/quiz", quizRoutes);
 
 
 const PORT = process.env.PORT || 3000

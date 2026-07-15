@@ -96,8 +96,8 @@ model Quiz {
   score       Float
 
   //relier le quiz à sa leçon
-  leconId     Int        
-  lecon       Lecon      @relation(fields: [leconId], references: [id])
+  leconId     Int?        
+  lecon       Lecon?     @relation(fields: [leconId], references: [id])
 
   questions   Question[]
 }

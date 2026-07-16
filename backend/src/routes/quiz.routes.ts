@@ -25,43 +25,39 @@ router.get("/", async(req:Request, res:Response) => {
 
 // POST /quiz/importer
 router.post("/importer", authentifier, async(req:Request, res:Response)=> {
-    const { titre, leconId } = req.body; // On récupère le titre et l'ID de la leçon (optionnel)
+    const { titre, leconId } = req.body;
 
     try {
         const { data } = await opentdb.get("/api.php", {params: {amount: 5,type: "multiple"}});
-        console.log("🔍 RÉPONSE BRUTE DE L'API :", data);
+        console.log("Reponse d'API :", data);
 
-        // Vérification que l'API a bien renvoyé des données
         if (data.response_code !== 0 || !data.results || data.results.length < 5) {
-            return res.status(502).json({ erreur: "Impossible de récupérer 5 questions depuis l'API." });
+            return res.status(502).json({ erreur: "Impossible de recupererer 5 questions depuis l'API." });
         }
 
         let importe = 0;
 
-        // 2. Créer le Quiz en base de données d'abord pour avoir un ID
         const nouveauQuiz = await prisma.quiz.create({
             data: {
-                titre: titre || "Quiz généré automatiquement",
-                score: 5, // 5 questions = 5 points maximum
-                ...(leconId && { leconId: Number(leconId) }) // Lie à la leçon si fourni
+                titre: titre || "Quiz genere automatiquement",
+                score: 5,
+                ...(leconId && { leconId: Number(leconId) })
             }
         });
 
-        // 3. Transformer et stocker les 5 questions une par une
         for (const q of data.results) {
             await prisma.question.create({
                 data: {
                     enonce: q.question,
                     bonneReponse: q.correct_answer,
-                    mauvaisesReponses: q.incorrect_answers, // L'API renvoie déjà un tableau de 3 mauvaises réponses
-                    quizId: nouveauQuiz.id                  // On lie la question au quiz qu'on vient de créer
+                    mauvaisesReponses: q.incorrect_answers, 
+                    quizId: nouveauQuiz.id                  
                 }
             });
             importe++;
         }
 
-        // 4. Réponse de succès
-        res.status(201).json({message: `${importe} questions importées avec succès pour le quiz !`,quizId: nouveauQuiz.id});
+        res.status(201).json({message: `${importe} questions importees avec succes pour le quiz !`,quizId: nouveauQuiz.id});
 
     } catch (e) {
         if (axios.isAxiosError(e)) {
@@ -69,5 +65,27 @@ router.post("/importer", authentifier, async(req:Request, res:Response)=> {
         }
     }
 });
+
+
+//pour pouvoire associer un quiz apres l'avoire cree
+// PATCH /quiz/:id/lier-lecon
+router.patch("/:id/lier-lecon", authentifier, async (req: Request, res: Response) => {
+    const quizId = Number(req.params.id);
+    const { leconId } = req.body;
+
+    try {
+        const quizUpdate = await prisma.quiz.update({
+            where: { id: quizId },
+            data: { leconId: Number(leconId) }
+        });
+
+        res.json({message: "Quiz lie a la lecon avec succes !",quiz: quizUpdate});
+    } catch (error) {
+        res.status(400).json({ erreur: "Impossible de lier le quiz" });
+    }
+});
+
+
+
 
 export default router;

@@ -37,8 +37,8 @@ Lancer le serveur:
 
 ### 1. Authentification
 
-`POST` Création de compte (Etudiant, Formateur ou Admin), Route: `/auth/register`
-`POST` Connexion, Route: `/auth/login`
+    `POST` Création de compte (Etudiant, Formateur ou Admin), Route: `/auth/register`
+    `POST` Connexion, Route: `/auth/login`
 
 
 ---
@@ -46,9 +46,9 @@ Lancer le serveur:
 ### 4. Quiz
 | Méthode | Route | Description | Accès |
 
-`GET` Liste de tous les quizs, Route: `/quiz`
-`POST` Ajoute un nouveau quiz, Route: `/quiz/importer`
-`PATCH` Associer un quiz a un Lecon, Route: `/quiz/:id/lier-lecon`
-`DELETE` Supprime un quiz, Route: `/monstre/supprimer/:nom`
+    `GET` Liste de tous les quizs, Route: `/quiz`
+    `POST` Ajoute un nouveau quiz, Route: `/quiz/importer`
+    `PATCH` Associer un quiz a un Lecon, Route: `/quiz/:id/lier-lecon`
+    `DELETE` Supprime un quiz, Route: `/monstre/supprimer/:nom`
 
 ---

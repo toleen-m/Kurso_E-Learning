@@ -43,4 +43,4 @@ Authorization: Bearer {{login.response.body.token}}
 ###
 
 GET http://localhost:3000/inscriptions/moi
-Authorization: Bearer {{login.response.body.token}}3
+Authorization: Bearer {{login.response.body.token}}

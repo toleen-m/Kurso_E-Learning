@@ -44,7 +44,6 @@ Lancer le serveur:
 ---
 
 ### 4. Quiz
-| Méthode | Route | Description | Accès |
 
     `GET` Liste de tous les quizs, Route: `/quiz`
     `POST` Ajoute un nouveau quiz, Route: `/quiz/importer`

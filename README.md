@@ -43,7 +43,39 @@ Lancer le serveur:
 
 ---
 
-### 4. Quiz
+### 2. Cours
+
+    `GET` Récupérer tous les cours avec leurs leçons dans l'ordre, Route: `/cours`
+    `GET` Récupérer un cours précis avec ses leçons, Route: `/cours/:id`
+    `POST` Créer un cours, Route: `/cours`
+    `PUT' Modifier un cours, Route: `/cours/:id`
+    `DELETE` Supprimer un cours, Route: `/cours/:id`
+
+
+---
+
+### 3. Inscription
+
+    `POST` S'INSCRIRE, Route: `/inscriptions`
+    `GET` List des inscriptions personnele, Route: `/inscriptions/moi`
+    `PATCH` Mise a jour d'un inscription, Route: `/inscriptions/:id
+
+
+---
+
+### 4. Lecon
+
+    `GET` Récupérer toutes les leçons, Route: `/leconrs`
+    `GET` Récupérer les leçons d'un cours dans l'ordre, Route: `/lecons/cours/:coursId`
+    `GET` Récupérer une leçon précise, Route: `/lecons/:id`
+    `POST` Créer une leçon, Route: `/lecons`
+    `PUT` Modifier une leçon, Route: `/lecons/:id`
+    `DELETE` Supprimer une leçon, Route: `/lecons/:id`
+
+
+---
+
+### 5. Quiz
 
     `GET` Liste de tous les quizs, Route: `/api/quiz`
     `GET` Afficher un quiz et ses questions, Route: `/api/quiz/:id`

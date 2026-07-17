@@ -8,6 +8,8 @@ import { authentifier } from "./middleswares/auth.middleware.js"
 import { autoriser } from "./middleswares/role.middleware.js"
 
 import quizRoutes from "./routes/quiz.routes.js"
+import routerInscription from "./routes/inscription.routes.js"
+
 dotenv.config()
 
 const app = express()
@@ -18,6 +20,8 @@ app.use(express.json())
 app.use("/auth", routerAuth)
 app.use("/cours", routerCours)
 app.use("/lecons", routerLecon)
+
+app.use("/inscriptions", routerInscription)
 
 // Route d'accueil
 app.get("/", (req: Request, res: Response) => {

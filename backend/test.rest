@@ -28,3 +28,19 @@ Authorization: Bearer {{login.response.body.token}}
 {
   "titre": "Test3"
 }
+
+###
+
+# @name inscrire
+POST http://localhost:3000/inscriptions
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "coursId": 1
+}
+
+###
+
+GET http://localhost:3000/inscriptions/moi
+Authorization: Bearer {{login.response.body.token}}3

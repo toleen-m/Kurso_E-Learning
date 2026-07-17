@@ -2,10 +2,10 @@ import express, { type Request, type Response } from "express"
 import dotenv from "dotenv"
 import prisma from "./utils/prisma.js"
 import routerAuth from "./routes/auth.routes.js"
-import routerInscription from "./routes/inscription.routes.js"
 import { authentifier } from "./middleswares/auth.middleware.js"
 import { autoriser } from "./middleswares/role.middleware.js"
 import quizRoutes from "./routes/quiz.routes.js"
+import routerInscription from "./routes/inscription.routes.js"
 dotenv.config()
 
 const app = express()

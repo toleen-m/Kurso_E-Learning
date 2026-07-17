@@ -52,13 +52,47 @@ GET http://localhost:3000/lecons/cours/1
 ####
 
 
+
+
+
+
+//tous les quizs
+GET http://localhost:3000/api/quiz
+
+### 
+
+//afficher un quiz
+GET http://localhost:3000/api/quiz/5
+
+###
+
+// importer un quiz
 POST http://localhost:3000/api/quiz/importer
 Content-Type: application/json
 Authorization: Bearer {{login.response.body.token}}
 
 {
-  "titre": "Test3"
+  "titre": "Test2",
+  "leconId": "2"
 }
+
+
+###
+
+// Modifier un quiz
+PUT http://localhost:3000/api/quiz/6
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "titre": "Quiz mis à jour",
+  "score": 10
+}
+
+###
+
+DELETE http://localhost:3000/api/quiz/8
+Authorization: Bearer {{login.response.body.token}}
 
 ####
 

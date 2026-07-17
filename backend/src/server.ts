@@ -6,6 +6,9 @@ import { authentifier } from "./middleswares/auth.middleware.js"
 import { autoriser } from "./middleswares/role.middleware.js"
 import quizRoutes from "./routes/quiz.routes.js"
 import routerInscription from "./routes/inscription.routes.js"
+
+
+app.use("/inscriptions", routerInscription)
 dotenv.config()
 
 const app = express()

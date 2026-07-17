@@ -9,6 +9,7 @@ Content-Type: application/json
 
 ###
 
+# @name login
 POST http://localhost:3000/auth/login
 Content-Type: application/json
 
@@ -48,3 +49,24 @@ GET http://localhost:3000/lecons/1
 
 ### Récupérer toutes les leçons d'un cours
 GET http://localhost:3000/lecons/cours/1
+####
+
+
+POST http://localhost:3000/api/quiz/importer
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "titre": "Test3"
+}
+
+####
+
+//associer un quiz a un lecon
+PATCH http://localhost:3000/api/quiz/5/lier-lecon
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "leconId": 2
+}

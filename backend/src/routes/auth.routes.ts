@@ -1,6 +1,7 @@
 import { Router } from "express"
 import prisma from "../utils/prisma.js"
 import bcrypt from "bcryptjs"
+import dotenv from "dotenv"
 import jwt from "jsonwebtoken"
 
 const router = Router()

@@ -18,6 +18,37 @@ Content-Type: application/json
   "password": "123456"
 }
 
+###
+### ============================
+### TESTS COURS
+### ============================
+
+### Récupérer tous les cours
+GET http://localhost:3000/cours
+
+###
+
+### Récupérer un cours par son id
+GET http://localhost:3000/cours/1
+
+
+###
+### ============================
+### TESTS LEÇONS
+### ============================
+
+### Récupérer toutes les leçons
+GET http://localhost:3000/lecons
+
+###
+
+### Récupérer une leçon par son id
+GET http://localhost:3000/lecons/1
+
+###
+
+### Récupérer toutes les leçons d'un cours
+GET http://localhost:3000/lecons/cours/1
 ####
 
 

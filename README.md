@@ -45,9 +45,11 @@ Lancer le serveur:
 
 ### 4. Quiz
 
-    `GET` Liste de tous les quizs, Route: `/quiz`
-    `POST` Ajoute un nouveau quiz, Route: `/quiz/importer`
-    `PATCH` Associer un quiz a un Lecon, Route: `/quiz/:id/lier-lecon`
-    `DELETE` Supprime un quiz, Route: `/monstre/supprimer/:nom`
+    `GET` Liste de tous les quizs, Route: `/api/quiz`
+    `GET` Afficher un quiz et ses questions, Route: `/api/quiz/:id`
+    `PUT` Modifier un quiz, Route: `api/quiz/:id`
+    `POST` Ajoute un nouveau quiz, Route: `/api/quiz/importer`
+    `PATCH` Associer un quiz a un Lecon, Route: `/api/quiz/:id/lier-lecon`
+    `DELETE` Supprime un quiz, Route: `/api/quiz/:id`
 
 ---

@@ -51,8 +51,6 @@ model Cours {
   niveau      Niveau    @default(DEBUTANT)
   lecons      Lecon[]
 
-          //etudiants   Etudiant[]: relation (N -N) est gerer par Inscription
-
   createdAt   DateTime  @default(now())
   inscriptions Inscription[]
 }

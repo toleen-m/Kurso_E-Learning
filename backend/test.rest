@@ -18,9 +18,55 @@ Content-Type: application/json
   "password": "123456"
 }
 
+###
+### ============================
+### TESTS COURS
+### ============================
+
+### Récupérer tous les cours
+GET http://localhost:3000/cours
+
+###
+
+### Récupérer un cours par son id
+GET http://localhost:3000/cours/1
+
+
+###
+### ============================
+### TESTS LEÇONS
+### ============================
+
+### Récupérer toutes les leçons
+GET http://localhost:3000/lecons
+
+###
+
+### Récupérer une leçon par son id
+GET http://localhost:3000/lecons/1
+
+###
+
+### Récupérer toutes les leçons d'un cours
+GET http://localhost:3000/lecons/cours/1
 ####
 
 
+
+
+
+
+//tous les quizs
+GET http://localhost:3000/api/quiz
+
+### 
+
+//afficher un quiz
+GET http://localhost:3000/api/quiz/5
+
+###
+
+// importer un quiz
 POST http://localhost:3000/api/quiz/importer
 Content-Type: application/json
 Authorization: Bearer {{login.response.body.token}}
@@ -31,8 +77,20 @@ Authorization: Bearer {{login.response.body.token}}
 
 ###
 
-# @name inscrire
-POST http://localhost:3000/inscriptions
+// Modifier un quiz
+PUT http://localhost:3000/api/quiz/6
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "titre": "Quiz mis à jour",
+  "score": 10
+}
+
+###
+
+// Modifier un quiz
+PUT http://localhost:3000/api/quiz/6
 Content-Type: application/json
 Authorization: Bearer {{login.response.body.token}}
 
@@ -42,5 +100,35 @@ Authorization: Bearer {{login.response.body.token}}
 
 ###
 
-GET http://localhost:3000/inscriptions/moi
+DELETE http://localhost:3000/api/quiz/8
 Authorization: Bearer {{login.response.body.token}}
+
+####
+
+//associer un quiz a un lecon
+PATCH http://localhost:3000/api/quiz/5/lier-lecon
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "leconId": 2
+}
+
+
+
+
+
+
+###
+
+# @name inscrire
+POST http://localhost:3000/inscriptions
+  "titre": "Test2",
+  "leconId": "2"
+}
+
+###
+
+GET http://localhost:3000/inscriptions/moi
+
+

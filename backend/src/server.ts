@@ -2,40 +2,59 @@ import express, { type Request, type Response } from "express"
 import dotenv from "dotenv"
 import prisma from "./utils/prisma.js"
 import routerAuth from "./routes/auth.routes.js"
+import routerCours from "./routes/cours.routes.js"
+import routerLecon from "./routes/lecon.routes.js"
 import { authentifier } from "./middleswares/auth.middleware.js"
 import { autoriser } from "./middleswares/role.middleware.js"
+
 import quizRoutes from "./routes/quiz.routes.js"
 import routerInscription from "./routes/inscription.routes.js"
 
 dotenv.config()
 
 const app = express()
+
 app.use(express.json())
+
+// Routes principales
 app.use("/auth", routerAuth)
+app.use("/cours", routerCours)
+app.use("/lecons", routerLecon)
 
 app.use("/inscriptions", routerInscription)
 
+// Route d'accueil
 app.get("/", (req: Request, res: Response) => {
-  res.json({ message: "Kurso - Platform E-learning" })
+  return res.json({
+    message: "Kurso - Platform E-learning"
+  })
 })
 
+// Route pour tester la connexion à la base de données
 app.get("/test-db", async (req: Request, res: Response) => {
-  const utilisateurs = await prisma.utilisateur.findMany()
+  try {
+    const utilisateurs = await prisma.utilisateur.findMany()
 
-  res.json(utilisateurs)
+    return res.status(200).json(utilisateurs)
+  } catch (error) {
+    console.error("Erreur test base de données :", error)
+
+    return res.status(500).json({
+      message: "Erreur de connexion à la base de données"
+    })
+  }
 })
 
+// Route de test réservée à l'administrateur
 app.get(
-    "/admin",
-    authentifier,
-    autoriser("ADMIN"),
-    (req, res) => {
-
-        res.json({
-            message: "Bienvenue admin"
-        })
-
-    }
+  "/admin",
+  authentifier,
+  autoriser("ADMIN"),
+  (req: Request, res: Response) => {
+    return res.json({
+      message: "Bienvenue admin"
+    })
+  }
 )
 
 //localhost:3000/auth/...
@@ -43,4 +62,7 @@ app.use("/api/quiz", quizRoutes);
 
 
 const PORT = process.env.PORT || 3000
-app.listen(PORT, () => console.log(`Server sur http://localhost:${PORT}`))
+
+app.listen(PORT, () => {
+  console.log(`Server sur http://localhost:${PORT}`)
+})

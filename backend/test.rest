@@ -89,17 +89,6 @@ Authorization: Bearer {{login.response.body.token}}
 
 ###
 
-// Modifier un quiz
-PUT http://localhost:3000/api/quiz/6
-Content-Type: application/json
-Authorization: Bearer {{login.response.body.token}}
-
-{
-  "coursId": 1
-}
-
-###
-
 DELETE http://localhost:3000/api/quiz/8
 Authorization: Bearer {{login.response.body.token}}
 
@@ -123,12 +112,15 @@ Authorization: Bearer {{login.response.body.token}}
 
 # @name inscrire
 POST http://localhost:3000/inscriptions
-  "titre": "Test2",
-  "leconId": "2"
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "coursId": 1
 }
 
 ###
 
 GET http://localhost:3000/inscriptions/moi
-
+Authorization: Bearer {{login.response.body.token}}3
 

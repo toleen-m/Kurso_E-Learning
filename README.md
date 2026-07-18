@@ -85,3 +85,11 @@ Lancer le serveur:
     `DELETE` Supprime un quiz, Route: `/api/quiz/:id`
 
 ---
+
+
+## Auteur: 
+
+    Toleen Msabeh
+    Bhatti, Unaiza Ali
+    Sainvry, Fabiola
+    Zeka, Maxance

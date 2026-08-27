@@ -1,0 +1,145 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  ETUDIANT
+  FORMATEUR
+  ADMIN
+}
+
+enum Niveau {
+  DEBUTANT
+  INTERMEDIAIRE
+  AVANCE
+}
+
+enum Statut {
+  EN_COURS
+  TERMINE
+  ABANDONNE
+}
+
+enum StatutDemande {
+  EN_ATTENTE
+  ACCEPTEE
+  REFUSEE
+}
+
+//----- MODELES --------
+
+model Utilisateur {
+  id          Int       @id @default(autoincrement())
+  clerkId     String    @unique
+  email       String    @unique
+  password    String
+  nom         String
+  role        Role      @default(ETUDIANT)
+
+  createdAt   DateTime  @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  inscriptions Inscription[]
+  coursPublies  Cours[]
+  demandeFormateur  DemandeFormateur[]
+}
+
+model DemandeFormateur {
+  id            Int            @id @default(autoincrement())
+
+  utilisateurId Int
+  utilisateur   Utilisateur    @relation(fields: [utilisateurId], references: [id])
+
+  motivation    String
+  expertise     String
+  statut        StatutDemande  @default(EN_ATTENTE)
+
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model Cours {
+  id          Int       @id @default(autoincrement())
+  titre       String    
+  description String
+  niveau      Niveau    @default(DEBUTANT)
+
+  formateurId Int
+  formateur   Utilisateur @relation(fields: [formateurId], references: [id])
+
+  createdAt   DateTime  @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  lecons      Lecon[]
+  inscriptions Inscription[]
+
+  @@unique([formateurId, titre])
+}
+
+model Inscription {
+  id               Int            @id @default(autoincrement())
+  statut           Statut         @default(EN_COURS)
+  progression      Float          @default(0) //en%
+
+  utilisateurId    Int
+  coursId          Int
+
+  utilisateur      Utilisateur    @relation(fields: [utilisateurId], references: [id])
+  cours            Cours          @relation(fields: [coursId], references: [id])
+
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  // empêche un étudiant de s'inscrire deux fois au même cours
+  @@unique([utilisateurId, coursId])
+}
+
+model Lecon {
+  id          Int       @id @default(autoincrement())
+  titre       String
+  contenu     String
+  ordre       Int
+
+  coursId     Int       
+  cours       Cours     @relation(fields: [coursId], references: [id])
+
+  quiz        Quiz[]
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // titre de leçon doit être unique par cours
+  @@unique([coursId, titre]) 
+}
+
+model Quiz {
+  id          Int       @id @default(autoincrement())
+  titre       String
+  score       Float     @default(0)
+
+  //relier le quiz à sa leçon
+  leconId     Int?        
+  lecon       Lecon?     @relation(fields: [leconId], references: [id])
+
+  questions   Question[]
+}
+
+model Question {
+  id          Int       @id @default(autoincrement())
+  enonce      String
+  bonneReponse     String
+  mauvaisesReponses  String[]
+  
+  quizId      Int
+  quiz        Quiz   @relation(fields: [quizId], references: [id])
+}

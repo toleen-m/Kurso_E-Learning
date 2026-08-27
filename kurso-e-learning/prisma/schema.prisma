@@ -5,7 +5,7 @@
 
 generator client {
   provider = "prisma-client"
-  output   = "../app/generated/prisma"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -35,29 +35,41 @@ enum Statut {
 
 model Utilisateur {
   id          Int       @id @default(autoincrement())
+  clerkId     String    @unique
   email       String    @unique
   password    String
   nom         String
   role        Role      @default(ETUDIANT)
+
   createdAt   DateTime  @default(now())
+  updatedAt     DateTime    @updatedAt
+
   inscriptions Inscription[]
+  coursPublies  Cours[]
 }
 
 model Cours {
   id          Int       @id @default(autoincrement())
-  titre       String    @unique
+  titre       String    
   description String
   niveau      Niveau    @default(DEBUTANT)
-  lecons      Lecon[]
+
+  formateurId Int
+  formateur   Utilisateur @relation(fields: [formateurId], references: [id])
 
   createdAt   DateTime  @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  lecons      Lecon[]
   inscriptions Inscription[]
+
+  @@unique([formateurId, titre])
 }
 
 model Inscription {
   id               Int            @id @default(autoincrement())
   statut           Statut         @default(EN_COURS)
-  progression      Float    //%
+  progression      Float          @default(0)
 
   utilisateurId    Int
   coursId          Int
@@ -66,6 +78,7 @@ model Inscription {
   cours            Cours          @relation(fields: [coursId], references: [id])
 
   createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
 
   // empêche un étudiant de s'inscrire deux fois au même cours
   @@unique([utilisateurId, coursId])
@@ -77,11 +90,13 @@ model Lecon {
   contenu     String
   ordre       Int
 
-  //relier le lecon à son cours
   coursId     Int       
   cours       Cours     @relation(fields: [coursId], references: [id])
 
   quiz        Quiz[]
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
   // titre de leçon doit être unique par cours
   @@unique([coursId, titre]) 
@@ -90,7 +105,7 @@ model Lecon {
 model Quiz {
   id          Int       @id @default(autoincrement())
   titre       String
-  score       Float
+  score       Float     @default(0)
 
   //relier le quiz à sa leçon
   leconId     Int?        

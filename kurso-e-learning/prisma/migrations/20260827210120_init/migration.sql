@@ -10,11 +10,13 @@ CREATE TYPE "Statut" AS ENUM ('EN_COURS', 'TERMINE', 'ABANDONNE');
 -- CreateTable
 CREATE TABLE "Utilisateur" (
     "id" SERIAL NOT NULL,
+    "clerkId" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "nom" TEXT NOT NULL,
     "role" "Role" NOT NULL DEFAULT 'ETUDIANT',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Utilisateur_pkey" PRIMARY KEY ("id")
 );
@@ -25,7 +27,9 @@ CREATE TABLE "Cours" (
     "titre" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "niveau" "Niveau" NOT NULL DEFAULT 'DEBUTANT',
+    "formateurId" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Cours_pkey" PRIMARY KEY ("id")
 );
@@ -34,10 +38,11 @@ CREATE TABLE "Cours" (
 CREATE TABLE "Inscription" (
     "id" SERIAL NOT NULL,
     "statut" "Statut" NOT NULL DEFAULT 'EN_COURS',
-    "progression" DOUBLE PRECISION NOT NULL,
+    "progression" DOUBLE PRECISION NOT NULL DEFAULT 0,
     "utilisateurId" INTEGER NOT NULL,
     "coursId" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Inscription_pkey" PRIMARY KEY ("id")
 );
@@ -49,6 +54,8 @@ CREATE TABLE "Lecon" (
     "contenu" TEXT NOT NULL,
     "ordre" INTEGER NOT NULL,
     "coursId" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Lecon_pkey" PRIMARY KEY ("id")
 );
@@ -57,7 +64,7 @@ CREATE TABLE "Lecon" (
 CREATE TABLE "Quiz" (
     "id" SERIAL NOT NULL,
     "titre" TEXT NOT NULL,
-    "score" DOUBLE PRECISION NOT NULL,
+    "score" DOUBLE PRECISION NOT NULL DEFAULT 0,
     "leconId" INTEGER,
 
     CONSTRAINT "Quiz_pkey" PRIMARY KEY ("id")
@@ -75,16 +82,22 @@ CREATE TABLE "Question" (
 );
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Utilisateur_clerkId_key" ON "Utilisateur"("clerkId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Utilisateur_email_key" ON "Utilisateur"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Cours_titre_key" ON "Cours"("titre");
+CREATE UNIQUE INDEX "Cours_formateurId_titre_key" ON "Cours"("formateurId", "titre");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Inscription_utilisateurId_coursId_key" ON "Inscription"("utilisateurId", "coursId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Lecon_coursId_titre_key" ON "Lecon"("coursId", "titre");
+
+-- AddForeignKey
+ALTER TABLE "Cours" ADD CONSTRAINT "Cours_formateurId_fkey" FOREIGN KEY ("formateurId") REFERENCES "Utilisateur"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Inscription" ADD CONSTRAINT "Inscription_utilisateurId_fkey" FOREIGN KEY ("utilisateurId") REFERENCES "Utilisateur"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

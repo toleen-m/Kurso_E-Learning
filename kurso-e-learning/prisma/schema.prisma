@@ -30,6 +30,11 @@ enum Statut {
   ABANDONNE
 }
 
+enum StatutDemande {
+  EN_ATTENTE
+  ACCEPTEE
+  REFUSEE
+}
 
 //----- MODELES --------
 
@@ -46,6 +51,21 @@ model Utilisateur {
 
   inscriptions Inscription[]
   coursPublies  Cours[]
+  demandeFormateur  DemandeFormateur[]
+}
+
+model DemandeFormateur {
+  id            Int            @id @default(autoincrement())
+
+  utilisateurId Int
+  utilisateur   Utilisateur    @relation(fields: [utilisateurId], references: [id])
+
+  motivation    String
+  expertise     String
+  statut        StatutDemande  @default(EN_ATTENTE)
+
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
 }
 
 model Cours {
@@ -69,7 +89,7 @@ model Cours {
 model Inscription {
   id               Int            @id @default(autoincrement())
   statut           Statut         @default(EN_COURS)
-  progression      Float          @default(0)
+  progression      Float          @default(0) //en%
 
   utilisateurId    Int
   coursId          Int

@@ -1,0 +1,24 @@
+import { SignInButton, UserButton, Show } from "@clerk/nextjs";
+import Link from "next/link";
+
+export function Header() {
+    return(
+        <header className="sticky top-0 z-50 bg-gray-900/80 border-b border-gray-800">
+            <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+                <Link href="/" className="flex items-center gap-2">
+                    <span className="text-3xl">🎓</span>
+                    <span className="text-xl font-bold bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">KURSO</span>
+                </Link>
+
+                <nav className="flex items-center gap-6">
+                    <Link href="/cours" className="text-gray-300 hover:text-white transition">
+                        Cours
+                    </Link>
+                    <button className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition">
+                        Se connecter
+                    </button>
+                </nav>
+            </div>
+        </header>
+    )
+}

@@ -14,9 +14,20 @@ export function Header() {
                     <Link href="/cours" className="text-gray-300 hover:text-white transition">
                         Cours
                     </Link>
-                    <button className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition">
-                        Se connecter
-                    </button>
+                    <Show when="signed-out">
+                        <SignInButton mode="modal">
+                            <button className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition">
+                                Se Connecter
+                            </button>
+                        </SignInButton>
+                    </Show>
+
+                    <Show when="signed-in">
+                        <Link href="/new" className="bg-grandient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-4 py-2 rounded-lg transition">
+                            + Confession
+                        </Link>
+                        <UserButton afterSwitchSessionUrl="/"/>
+                    </Show>
                 </nav>
             </div>
         </header>

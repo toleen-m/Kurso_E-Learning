@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export function Header() {
     return(
-        <header className="sticky top-0 z-50 bg-gray-900/80 border-b border-gray-800">
+        <header className="sticky top-0 z-50 bg-slate-900 border-b border-slate-800">
             <div className="container mx-auto px-4 py-4 flex justify-between items-center">
                 <Link href="/" className="flex items-center gap-2">
                     <span className="text-3xl">🎓</span>
@@ -11,7 +11,7 @@ export function Header() {
                 </Link>
 
                 <nav className="flex items-center gap-6">
-                    <Link href="/cours" className="text-gray-300 hover:text-white transition">
+                    <Link href="/cours" className="text-slate-300 hover:text-white transition">
                         Cours
                     </Link>
                     <Show when="signed-out">

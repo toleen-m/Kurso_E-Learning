@@ -2,10 +2,10 @@
 import { redirect } from "next/navigation";
 import { QuizForm } from "@/components/QuizForm";
 
-export default async function NewQuizPage({searchParams} : {searchParams: Promise<{ leocnId?: string}>}) {
+export default async function NewQuizPage({searchParams} : {searchParams: Promise<{ leconId?: string}>}) {
 
     const params = await searchParams;
-    const leconId = Number(params.leocnId);
+    const leconId = Number(params.leconId);
 
     if (!leconId) {
         return <p>Leçon introuvable.</p>;

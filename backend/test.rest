@@ -123,4 +123,31 @@ Authorization: Bearer {{login.response.body.token}}
 
 GET http://localhost:3000/inscriptions/moi
 Authorization: Bearer {{login.response.body.token}}3
+### REGISTER
+POST http://localhost:3000/auth/register
+Content-Type: application/json
 
+{
+  "nom": "Test User",
+  "email": "testuser999@email.com",
+  "password": "123456"
+}
+### LOGIN
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "email": "testuser@email.com",
+  "password": "123456"
+}
+
+### ME - 401 sans token
+GET http://localhost:3000/auth/me
+
+### ME - avec token
+GET http://localhost:3000/auth/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwicm9sZSI6IkVUVURJQU5UIiwiaWF0IjoxNzg4MjAxNDIwLCJleHAiOjE3ODgyMDUwMjB9.tcPtXjD5p7HvWeGgZ9TdsdPzqRm9JbBpsQAYB6I70c0
+
+### ADMIN - 403 si ETUDIANT
+GET http://localhost:3000/admin
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwicm9sZSI6IkVUVURJQU5UIiwiaWF0IjoxNzg4MjAxNDIwLCJleHAiOjE3ODgyMDUwMjB9.tcPtXjD5p7HvWeGgZ9TdsdPzqRm9JbBpsQAYB6I70c0

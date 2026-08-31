@@ -3,6 +3,7 @@ import prisma from "../utils/prisma.js"
 import bcrypt from "bcryptjs"
 import dotenv from "dotenv"
 import jwt from "jsonwebtoken"
+import { authentifier } from "../middleswares/auth.middleware.js"
 
 const router = Router()
 
@@ -91,5 +92,36 @@ router.post("/login", async (req, res) => {
     }
 })
 
+router.get("/me", authentifier, async (req, res) => {
+    try {
+        const utilisateur = await prisma.utilisateur.findUnique({
+            where: {
+                id: req.user.id
+            },
+            select: {
+                id: true,
+                nom: true,
+                email: true,
+                role: true,
+                createdAt: true
+            }
+        })
+
+        if (!utilisateur) {
+            return res.status(404).json({
+                erreur: "Utilisateur introuvable"
+            })
+        }
+
+        return res.json(utilisateur)
+
+    } catch (error) {
+        console.log("ME ERROR:", error)
+
+        return res.status(500).json({
+            erreur: "Erreur serveur"
+        })
+    }
+})
 
 export default router

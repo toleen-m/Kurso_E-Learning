@@ -39,7 +39,7 @@ enum StatutDemande {
 //----- MODELES --------
 
 model Utilisateur {
-  id          Int       @id @default(autoincrement())
+  id            String    @id @default(cuid())
   clerkId     String    @unique
   email       String    @unique
   password    String
@@ -55,10 +55,10 @@ model Utilisateur {
 }
 
 model DemandeFormateur {
-  id            Int            @id @default(autoincrement())
+  id            String    @id @default(cuid())
 
-  utilisateurId Int
-  utilisateur   Utilisateur    @relation(fields: [utilisateurId], references: [id])
+  utilisateurId String
+  utilisateur   Utilisateur    @relation(fields: [utilisateurId], references: [id], onDelete: Cascade)
 
   motivation    String
   expertise     String
@@ -69,13 +69,13 @@ model DemandeFormateur {
 }
 
 model Cours {
-  id          Int       @id @default(autoincrement())
+  id            String    @id @default(cuid())
   titre       String    
   description String
   niveau      Niveau    @default(DEBUTANT)
 
-  formateurId Int
-  formateur   Utilisateur @relation(fields: [formateurId], references: [id])
+  formateurId String
+  formateur   Utilisateur @relation(fields: [formateurId], references: [id], onDelete: Cascade)
 
   createdAt   DateTime  @default(now())
   updatedAt     DateTime    @updatedAt
@@ -87,15 +87,15 @@ model Cours {
 }
 
 model Inscription {
-  id               Int            @id @default(autoincrement())
+  id            String    @id @default(cuid())
   statut           Statut         @default(EN_COURS)
   progression      Float          @default(0) //en%
 
-  utilisateurId    Int
-  coursId          Int
+  utilisateurId    String
+  coursId          String
 
-  utilisateur      Utilisateur    @relation(fields: [utilisateurId], references: [id])
-  cours            Cours          @relation(fields: [coursId], references: [id])
+  utilisateur      Utilisateur    @relation(fields: [utilisateurId], references: [id], onDelete: Cascade)
+  cours            Cours          @relation(fields: [coursId], references: [id], onDelete: Cascade)
 
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @updatedAt
@@ -105,13 +105,13 @@ model Inscription {
 }
 
 model Lecon {
-  id          Int       @id @default(autoincrement())
+  id            String    @id @default(cuid())
   titre       String
   contenu     String
   ordre       Int
 
-  coursId     Int       
-  cours       Cours     @relation(fields: [coursId], references: [id])
+  coursId     String       
+  cours       Cours     @relation(fields: [coursId], references: [id], onDelete: Cascade)
 
   quiz        Quiz[]
 
@@ -123,23 +123,23 @@ model Lecon {
 }
 
 model Quiz {
-  id          Int       @id @default(autoincrement())
+  id            String    @id @default(cuid())
   titre       String
   score       Float     @default(0)
 
   //relier le quiz à sa leçon
-  leconId     Int        
-  lecon       Lecon     @relation(fields: [leconId], references: [id])
+  leconId     String        
+  lecon       Lecon     @relation(fields: [leconId], references: [id], onDelete: Cascade)
 
   questions   Question[]
 }
 
 model Question {
-  id          Int       @id @default(autoincrement())
+  id            String    @id @default(cuid())
   enonce      String
   bonneReponse     String
   mauvaisesReponses  String[]
   
-  quizId      Int
-  quiz        Quiz   @relation(fields: [quizId], references: [id])
+  quizId      String
+  quiz        Quiz   @relation(fields: [quizId], references: [id], onDelete: Cascade)
 }

@@ -39,107 +39,107 @@ enum StatutDemande {
 //----- MODELES --------
 
 model Utilisateur {
-  id            String    @id @default(cuid())
-  clerkId     String    @unique
-  email       String    @unique
-  password    String
-  nom         String
-  role        Role      @default(ETUDIANT)
+  id       String @id @default(cuid())
+  clerkId  String @unique
+  email    String @unique
+  password String
+  nom      String
+  role     Role   @default(ETUDIANT)
 
-  createdAt   DateTime  @default(now())
-  updatedAt     DateTime    @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
-  inscriptions Inscription[]
-  coursPublies  Cours[]
-  demandeFormateur  DemandeFormateur[]
+  inscriptions     Inscription[]
+  coursPublies     Cours[]
+  demandeFormateur DemandeFormateur[]
 }
 
 model DemandeFormateur {
-  id            String    @id @default(cuid())
+  id String @id @default(cuid())
 
   utilisateurId String
-  utilisateur   Utilisateur    @relation(fields: [utilisateurId], references: [id], onDelete: Cascade)
+  utilisateur   Utilisateur @relation(fields: [utilisateurId], references: [id], onDelete: Cascade)
 
-  motivation    String
-  expertise     String
-  statut        StatutDemande  @default(EN_ATTENTE)
+  motivation String
+  expertise  String
+  statut     StatutDemande @default(EN_ATTENTE)
 
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Cours {
-  id            String    @id @default(cuid())
-  titre       String    
+  id          String @id @default(cuid())
+  titre       String
   description String
-  niveau      Niveau    @default(DEBUTANT)
+  niveau      Niveau @default(DEBUTANT)
 
   formateurId String
   formateur   Utilisateur @relation(fields: [formateurId], references: [id], onDelete: Cascade)
 
-  createdAt   DateTime  @default(now())
-  updatedAt     DateTime    @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  lecons      Lecon[]
+  lecons       Lecon[]
   inscriptions Inscription[]
 
   @@unique([formateurId, titre])
 }
 
 model Inscription {
-  id            String    @id @default(cuid())
-  statut           Statut         @default(EN_COURS)
-  progression      Float          @default(0) //en%
+  id          String @id @default(cuid())
+  statut      Statut @default(EN_COURS)
+  progression Float  @default(0) //en%
 
-  utilisateurId    String
-  coursId          String
+  utilisateurId String
+  coursId       String
 
-  utilisateur      Utilisateur    @relation(fields: [utilisateurId], references: [id], onDelete: Cascade)
-  cours            Cours          @relation(fields: [coursId], references: [id], onDelete: Cascade)
+  utilisateur Utilisateur @relation(fields: [utilisateurId], references: [id], onDelete: Cascade)
+  cours       Cours       @relation(fields: [coursId], references: [id], onDelete: Cascade)
 
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   // empêche un étudiant de s'inscrire deux fois au même cours
   @@unique([utilisateurId, coursId])
 }
 
 model Lecon {
-  id            String    @id @default(cuid())
-  titre       String
-  contenu     String
-  ordre       Int
+  id      String @id @default(cuid())
+  titre   String
+  contenu String
+  ordre   Int
 
-  coursId     String       
-  cours       Cours     @relation(fields: [coursId], references: [id], onDelete: Cascade)
+  coursId String
+  cours   Cours  @relation(fields: [coursId], references: [id], onDelete: Cascade)
 
-  quiz        Quiz[]
+  quiz Quiz[]
 
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   // titre de leçon doit être unique par cours
-  @@unique([coursId, titre]) 
+  @@unique([coursId, titre])
 }
 
 model Quiz {
-  id            String    @id @default(cuid())
-  titre       String
-  score       Float     @default(0)
+  id    String @id @default(cuid())
+  titre String
+  score Float  @default(0)
 
   //relier le quiz à sa leçon
-  leconId     String        
-  lecon       Lecon     @relation(fields: [leconId], references: [id], onDelete: Cascade)
+  leconId String
+  lecon   Lecon  @relation(fields: [leconId], references: [id], onDelete: Cascade)
 
-  questions   Question[]
+  questions Question[]
 }
 
 model Question {
-  id            String    @id @default(cuid())
-  enonce      String
-  bonneReponse     String
-  mauvaisesReponses  String[]
-  
-  quizId      String
-  quiz        Quiz   @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  id                String   @id @default(cuid())
+  enonce            String
+  bonneReponse      String
+  mauvaisesReponses String[]
+
+  quizId String
+  quiz   Quiz   @relation(fields: [quizId], references: [id], onDelete: Cascade)
 }

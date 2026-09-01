@@ -42,7 +42,6 @@ model Utilisateur {
   id       String @id @default(cuid())
   clerkId  String @unique
   email    String @unique
-  password String
   nom      String
   role     Role   @default(ETUDIANT)
 

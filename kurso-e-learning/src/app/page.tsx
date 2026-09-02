@@ -1,5 +1,5 @@
 import { currentUser } from "@clerk/nextjs/server"
-import { syncUser } from "@/actions/user.actions"
+import { syncUser, requireRole } from "@/actions/user.actions"
 
 export default async function Home() {
   const clerkUser = await currentUser()
@@ -17,7 +17,7 @@ export default async function Home() {
   }
 
   const user = await syncUser()
-
+  await requireRole("ETUDIANT")
   return (
     <main>
       <h1>Kurso E-Learning</h1>

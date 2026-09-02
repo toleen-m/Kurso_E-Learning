@@ -1,5 +1,9 @@
 import Link from "next/link"
-import { getLeconById } from "@/actions/lecon.actions"
+import {
+  deleteLecon,
+  getLeconById,
+} from "@/actions/lecon.actions"
+import LeconUpdateForm from "@/components/LeconUpdateForm"
 
 type Props = {
   params: Promise<{
@@ -16,14 +20,18 @@ export default async function LeconPage({ params }: Props) {
     return (
       <main>
         <h1>Leçon introuvable</h1>
-        <Link href={`/cours/${coursId}`}>Retour au cours</Link>
+        <Link href={`/cours/${coursId}`}>
+          Retour au cours
+        </Link>
       </main>
     )
   }
 
   return (
     <main>
-      <Link href={`/cours/${coursId}`}>← Retour au cours</Link>
+      <Link href={`/cours/${coursId}`}>
+        ← Retour au cours
+      </Link>
 
       <h1>{lecon.titre}</h1>
       <p>Leçon {lecon.ordre}</p>
@@ -31,6 +39,24 @@ export default async function LeconPage({ params }: Props) {
       <div>
         <p>{lecon.contenu}</p>
       </div>
+
+      <h2>Modifier la leçon</h2>
+
+      <LeconUpdateForm lecon={lecon} />
+
+      <h2>Supprimer la leçon</h2>
+
+      <form action={deleteLecon}>
+        <input
+          type="hidden"
+          name="id"
+          value={lecon.id}
+        />
+
+        <button type="submit">
+          Supprimer la leçon
+        </button>
+      </form>
 
       <h2>Quiz</h2>
 

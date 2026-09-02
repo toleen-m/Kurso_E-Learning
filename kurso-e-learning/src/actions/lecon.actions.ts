@@ -2,6 +2,7 @@
 
 import prisma from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
+import { redirect } from "next/navigation"
 
 export async function getLeconById(id: string) {
   const lecon = await prisma.lecon.findUnique({
@@ -47,4 +48,68 @@ export async function createLecon(formData: FormData) {
   })
 
   revalidatePath(`/cours/${coursId}`)
+}
+
+export async function updateLecon(formData: FormData) {
+  const id = formData.get("id") as string
+  const titre = formData.get("titre") as string
+  const contenu = formData.get("contenu") as string
+  const ordre = Number(formData.get("ordre"))
+
+  if (!id || !titre || !contenu || Number.isNaN(ordre)) {
+    throw new Error("Tous les champs sont obligatoires")
+  }
+
+  const lecon = await prisma.lecon.findUnique({
+    where: {
+      id,
+    },
+  })
+
+  if (!lecon) {
+    throw new Error("Leçon introuvable")
+  }
+
+  await prisma.lecon.update({
+    where: {
+      id,
+    },
+    data: {
+      titre,
+      contenu,
+      ordre,
+    },
+  })
+
+  revalidatePath(`/cours/${lecon.coursId}`)
+  revalidatePath(`/cours/${lecon.coursId}/lecons/${id}`)
+}
+
+export async function deleteLecon(formData: FormData) {
+  const id = formData.get("id") as string
+
+  if (!id) {
+    throw new Error("Identifiant de la leçon manquant")
+  }
+
+  const lecon = await prisma.lecon.findUnique({
+    where: {
+      id,
+    },
+  })
+
+  if (!lecon) {
+    throw new Error("Leçon introuvable")
+  }
+
+  const coursId = lecon.coursId
+
+  await prisma.lecon.delete({
+    where: {
+      id,
+    },
+  })
+
+  revalidatePath(`/cours/${coursId}`)
+  redirect(`/cours/${coursId}`)
 }

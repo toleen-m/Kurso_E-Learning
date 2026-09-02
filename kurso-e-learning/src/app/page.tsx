@@ -7,8 +7,11 @@ export default async function Home() {
   if (!clerkUser) {
     return (
       <main>
-        <h1>Kurso E-Learning</h1>
-        <p>Connecte-toi avec le bouton en haut.</p>
+        <div>
+          <h1>Kurso E-Learning</h1>
+          <p>Connecte-toi avec le bouton en haut.</p>
+        </div>
+        
       </main>
     )
   }

@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { getCoursById } from "@/actions/cours.actions"
+import LeconForm from "@/components/LeconForm"
 
 type Props = {
   params: Promise<{
@@ -31,6 +32,8 @@ export default async function CoursDetailPage({ params }: Props) {
       <p>Formateur : {cours.formateur.nom}</p>
 
       <h2>Leçons</h2>
+
+      <LeconForm coursId={cours.id} />
 
       {cours.lecons.length === 0 ? (
         <p>Aucune leçon pour ce cours.</p>

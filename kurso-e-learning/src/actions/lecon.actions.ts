@@ -3,6 +3,7 @@
 import prisma from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
+import { getCurrentUser } from "@/actions/user.actions"
 
 export async function getLeconById(id: string) {
   const lecon = await prisma.lecon.findUnique({
@@ -19,6 +20,16 @@ export async function getLeconById(id: string) {
 }
 
 export async function createLecon(formData: FormData) {
+  const utilisateur = await getCurrentUser()
+
+  if (!utilisateur) {
+    throw new Error("Utilisateur non authentifié")
+  }
+
+  if (utilisateur.role !== "FORMATEUR") {
+    throw new Error("Seul un formateur peut créer une leçon")
+  }
+
   const titre = formData.get("titre") as string
   const contenu = formData.get("contenu") as string
   const ordre = Number(formData.get("ordre"))
@@ -38,6 +49,12 @@ export async function createLecon(formData: FormData) {
     throw new Error("Cours introuvable")
   }
 
+  if (cours.formateurId !== utilisateur.id) {
+    throw new Error(
+      "Vous ne pouvez ajouter une leçon qu'à vos propres cours"
+    )
+  }
+
   await prisma.lecon.create({
     data: {
       titre,
@@ -51,6 +68,16 @@ export async function createLecon(formData: FormData) {
 }
 
 export async function updateLecon(formData: FormData) {
+  const utilisateur = await getCurrentUser()
+
+  if (!utilisateur) {
+    throw new Error("Utilisateur non authentifié")
+  }
+
+  if (utilisateur.role !== "FORMATEUR") {
+    throw new Error("Seul un formateur peut modifier une leçon")
+  }
+
   const id = formData.get("id") as string
   const titre = formData.get("titre") as string
   const contenu = formData.get("contenu") as string
@@ -64,10 +91,19 @@ export async function updateLecon(formData: FormData) {
     where: {
       id,
     },
+    include: {
+      cours: true,
+    },
   })
 
   if (!lecon) {
     throw new Error("Leçon introuvable")
+  }
+
+  if (lecon.cours.formateurId !== utilisateur.id) {
+    throw new Error(
+      "Vous ne pouvez modifier que les leçons de vos propres cours"
+    )
   }
 
   await prisma.lecon.update({
@@ -86,6 +122,16 @@ export async function updateLecon(formData: FormData) {
 }
 
 export async function deleteLecon(formData: FormData) {
+  const utilisateur = await getCurrentUser()
+
+  if (!utilisateur) {
+    throw new Error("Utilisateur non authentifié")
+  }
+
+  if (utilisateur.role !== "FORMATEUR") {
+    throw new Error("Seul un formateur peut supprimer une leçon")
+  }
+
   const id = formData.get("id") as string
 
   if (!id) {
@@ -96,10 +142,19 @@ export async function deleteLecon(formData: FormData) {
     where: {
       id,
     },
+    include: {
+      cours: true,
+    },
   })
 
   if (!lecon) {
     throw new Error("Leçon introuvable")
+  }
+
+  if (lecon.cours.formateurId !== utilisateur.id) {
+    throw new Error(
+      "Vous ne pouvez supprimer que les leçons de vos propres cours"
+    )
   }
 
   const coursId = lecon.coursId

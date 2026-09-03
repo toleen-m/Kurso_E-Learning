@@ -6,14 +6,14 @@ type Props = {
 
 export default function LeconForm({ coursId }: Props) {
   return (
-    <form action={createLecon}>
+    <form action={createLecon} className="form-container">
       <input
         type="hidden"
         name="coursId"
         value={coursId}
       />
 
-      <div>
+      <div className="form-group">
         <label htmlFor="titre">Titre</label>
         <input
           id="titre"
@@ -23,7 +23,7 @@ export default function LeconForm({ coursId }: Props) {
         />
       </div>
 
-      <div>
+      <div className="form-group">
         <label htmlFor="contenu">Contenu</label>
         <textarea
           id="contenu"
@@ -32,7 +32,7 @@ export default function LeconForm({ coursId }: Props) {
         />
       </div>
 
-      <div>
+      <div className="form-group">
         <label htmlFor="ordre">Ordre</label>
         <input
           id="ordre"

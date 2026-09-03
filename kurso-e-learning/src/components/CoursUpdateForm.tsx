@@ -11,14 +11,14 @@ type Props = {
 
 export default function CoursUpdateForm({ cours }: Props) {
   return (
-    <form action={updateCours}>
+    <form action={updateCours} className="form-container">
       <input
         type="hidden"
         name="id"
         value={cours.id}
       />
 
-      <div>
+      <div className="form-group">
         <label htmlFor="titre">Titre</label>
         <input
           id="titre"
@@ -29,7 +29,7 @@ export default function CoursUpdateForm({ cours }: Props) {
         />
       </div>
 
-      <div>
+      <div className="form-group">
         <label htmlFor="description">Description</label>
         <textarea
           id="description"
@@ -39,7 +39,7 @@ export default function CoursUpdateForm({ cours }: Props) {
         />
       </div>
 
-      <div>
+      <div className="form-group">
         <label htmlFor="niveau">Niveau</label>
         <select
           id="niveau"

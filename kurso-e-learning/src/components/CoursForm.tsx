@@ -2,8 +2,8 @@ import { createCours } from "@/actions/cours.actions"
 
 export default function CoursForm() {
   return (
-    <form action={createCours}>
-      <div>
+    <form action={createCours} className="form-container">
+      <div className="form-group">
         <label htmlFor="titre">Titre</label>
         <input
           id="titre"
@@ -13,7 +13,7 @@ export default function CoursForm() {
         />
       </div>
 
-      <div>
+      <div className="form-group">
         <label htmlFor="description">Description</label>
         <textarea
           id="description"
@@ -22,7 +22,7 @@ export default function CoursForm() {
         />
       </div>
 
-      <div>
+      <div className="form-group">
         <label htmlFor="niveau">Niveau</label>
         <select
           id="niveau"

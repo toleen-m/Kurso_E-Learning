@@ -27,54 +27,74 @@ export default async function CoursDetailPage({ params }: Props) {
 
   return (
     <main>
-      <Link href="/cours">← Retour aux cours</Link>
+      <Link href="/cours" className="back-link">
+        ← Retour aux cours
+      </Link>
 
-      <h1>{cours.titre}</h1>
-      <p>{cours.description}</p>
-      <p>Niveau : {cours.niveau}</p>
-      <p>Formateur : {cours.formateur.nom}</p>
+      <div className="card">
+        <h1>{cours.titre}</h1>
 
-      <h2>Modifier le cours</h2>
+        <p>{cours.description}</p>
 
-      <CoursUpdateForm cours={cours} />
+        <p className="info">
+          Niveau : {cours.niveau}
+        </p>
 
-      <h2>Supprimer le cours</h2>
+        <p className="info">
+          Formateur : {cours.formateur.nom}
+        </p>
+      </div>
 
-      <form action={deleteCours}>
-        <input
-          type="hidden"
-          name="id"
-          value={cours.id}
-        />
+      <section className="section">
+        <h2>Modifier le cours</h2>
+        <CoursUpdateForm cours={cours} />
+      </section>
 
-        <button type="submit">
-          Supprimer le cours
-        </button>
-      </form>
+      <section className="section">
+        <h2>Supprimer le cours</h2>
 
-      <h2>Ajouter une leçon</h2>
+        <form action={deleteCours}>
+          <input
+            type="hidden"
+            name="id"
+            value={cours.id}
+          />
 
-      <LeconForm coursId={cours.id} />
+          <button
+            type="submit"
+            className="danger-button"
+          >
+            Supprimer le cours
+          </button>
+        </form>
+      </section>
 
-      <h2>Leçons</h2>
+      <section className="section">
+        <h2>Ajouter une leçon</h2>
+        <LeconForm coursId={cours.id} />
+      </section>
 
-      {cours.lecons.length === 0 ? (
-        <p>Aucune leçon pour ce cours.</p>
-      ) : (
-        <div>
-          {cours.lecons.map((lecon) => (
-            <div key={lecon.id}>
-              <h3>
-                {lecon.ordre}. {lecon.titre}
-              </h3>
+      <section className="section">
+        <h2>Leçons</h2>
 
-              <Link href={`/cours/${cours.id}/lecons/${lecon.id}`}>
-                Voir la leçon
-              </Link>
-            </div>
-          ))}
-        </div>
-      )}
+        {cours.lecons.length === 0 ? (
+          <p>Aucune leçon pour ce cours.</p>
+        ) : (
+          <div>
+            {cours.lecons.map((lecon) => (
+              <div key={lecon.id} className="card">
+                <h3>
+                  {lecon.ordre}. {lecon.titre}
+                </h3>
+
+                <Link href={`/cours/${cours.id}/lecons/${lecon.id}`}>
+                  Voir la leçon
+                </Link>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
     </main>
   )
 }

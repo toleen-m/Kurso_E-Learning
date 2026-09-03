@@ -1,80 +1,52 @@
 import Link from "next/link"
-import {
-  deleteLecon,
-  getLeconById,
-} from "@/actions/lecon.actions"
-import LeconUpdateForm from "@/components/LeconUpdateForm"
+import { getCours } from "@/actions/cours.actions"
+import CoursForm from "@/components/CoursForm"
 
-type Props = {
-  params: Promise<{
-    coursId: string
-    leconId: string
-  }>
-}
-
-export default async function LeconPage({ params }: Props) {
-  const { coursId, leconId } = await params
-  const lecon = await getLeconById(leconId)
-
-  if (!lecon) {
-    return (
-      <main>
-        <h1>Leçon introuvable</h1>
-        <Link href={`/cours/${coursId}`}>
-          Retour au cours
-        </Link>
-      </main>
-    )
-  }
+export default async function CoursPage() {
+  const cours = await getCours()
 
   return (
     <main>
-      <Link href={`/cours/${coursId}`}>
-        ← Retour au cours
-      </Link>
+      <h1>Liste des cours</h1>
 
-      <h1>{lecon.titre}</h1>
-      <p>Leçon {lecon.ordre}</p>
+      <section className="section">
+        <h2>Créer un cours</h2>
+        <CoursForm />
+      </section>
 
-      <div>
-        <p>{lecon.contenu}</p>
-      </div>
+      <section className="section">
+        <h2>Cours disponibles</h2>
 
-      <h2>Modifier la leçon</h2>
+        {cours.length === 0 ? (
+          <p>Aucun cours disponible.</p>
+        ) : (
+          <div>
+            {cours.map((cours) => (
+              <div key={cours.id} className="card">
+                <h2>{cours.titre}</h2>
 
-      <LeconUpdateForm lecon={lecon} />
+                <p>{cours.description}</p>
 
-      <h2>Supprimer la leçon</h2>
+                <p className="info">
+                  Niveau : {cours.niveau}
+                </p>
 
-      <form action={deleteLecon}>
-        <input
-          type="hidden"
-          name="id"
-          value={lecon.id}
-        />
+                <p className="info">
+                  Formateur : {cours.formateur.nom}
+                </p>
 
-        <button type="submit">
-          Supprimer la leçon
-        </button>
-      </form>
+                <p className="info">
+                  {cours.lecons.length} leçon(s)
+                </p>
 
-      <h2>Quiz</h2>
-
-      {lecon.quiz.length === 0 ? (
-        <p>Aucun quiz pour cette leçon.</p>
-      ) : (
-        <div>
-          {lecon.quiz.map((quiz) => (
-            <div key={quiz.id}>
-              <Link
-                href={`/cours/${coursId}/lecons/${leconId}/quiz/${quiz.id}`}
-              >
-                {quiz.titre}
-              </Link>
-            </div>
-          ))}
-        </div>
-      )}
+                <Link href={`/cours/${cours.id}`}>
+                  Voir le cours
+                </Link>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
     </main>
   )
 }

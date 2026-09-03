@@ -3,6 +3,7 @@ import {
   deleteCours,
   getCoursById,
 } from "@/actions/cours.actions"
+import { getCurrentUser } from "@/actions/user.actions"
 import LeconForm from "@/components/LeconForm"
 import CoursUpdateForm from "@/components/CoursUpdateForm"
 
@@ -18,15 +19,15 @@ export default async function CoursDetailPage({ params }: Props) {
 
   if (!cours) {
     return (
-      <main className="min-h-screen bg-slate-950 text-slate-100">
-        <div className="container mx-auto px-4 py-10">
-          <h1 className="text-3xl font-bold">
+      <main className="min-h-screen bg-slate-50 p-8">
+        <div className="mx-auto max-w-4xl rounded-xl bg-white p-8 text-center shadow">
+          <h1 className="text-2xl font-bold text-red-600">
             Cours introuvable
           </h1>
 
           <Link
             href="/cours"
-            className="mt-6 inline-block text-purple-400 transition hover:text-purple-300"
+            className="mt-5 inline-block text-sm font-medium text-purple-600"
           >
             ← Retour aux cours
           </Link>
@@ -35,119 +36,129 @@ export default async function CoursDetailPage({ params }: Props) {
     )
   }
 
+  const utilisateur = await getCurrentUser()
+
+  const formateurDuCours =
+    utilisateur?.id === cours.formateurId
+
   return (
-    <main className="min-h-screen bg-slate-950 text-slate-100">
-      <div className="container mx-auto px-4 py-10">
+    <main className="min-h-screen bg-slate-50 py-12">
+      <div className="mx-auto max-w-4xl px-4">
         <Link
           href="/cours"
-          className="mb-8 inline-block text-sm text-purple-400 transition hover:text-purple-300"
+          className="text-sm font-medium text-purple-600"
         >
           ← Retour aux cours
         </Link>
 
-        <section className="rounded-xl border border-slate-800 bg-slate-900 p-6">
-          <span className="inline-block rounded-full bg-purple-500/10 px-3 py-1 text-xs font-medium text-purple-300">
+        <div className="mt-6 rounded-2xl bg-slate-900 p-8 text-white">
+          <p className="text-sm font-semibold text-purple-300">
             {cours.niveau}
-          </span>
+          </p>
 
-          <h1 className="mt-4 text-3xl font-bold text-white">
+          <h1 className="mt-2 text-4xl font-bold">
             {cours.titre}
           </h1>
 
-          <p className="mt-4 leading-7 text-slate-400">
+          <p className="mt-4 text-slate-300">
             {cours.description}
           </p>
 
           <p className="mt-4 text-sm text-slate-400">
-            Formateur :
-            <span className="ml-1 text-slate-200">
-              {cours.formateur.nom}
-            </span>
-          </p>
-        </section>
-
-        <section className="mt-10">
-          <h2 className="mb-5 text-2xl font-semibold">
-            Modifier le cours
-          </h2>
-
-          <CoursUpdateForm cours={cours} />
-        </section>
-
-        <section className="mt-10 rounded-xl border border-red-900/50 bg-red-950/20 p-6">
-          <h2 className="text-xl font-semibold text-red-300">
-            Supprimer le cours
-          </h2>
-
-          <p className="mt-2 text-sm text-slate-400">
-            Cette action supprimera définitivement le cours.
+            Formateur : {cours.formateur.nom}
           </p>
 
-          <form action={deleteCours} className="mt-5">
-            <input
-              type="hidden"
-              name="id"
-              value={cours.id}
-            />
+          <p className="mt-1 text-sm text-slate-400">
+            {cours.lecons.length} leçon(s)
+          </p>
+        </div>
 
-            <button
-              type="submit"
-              className="rounded-lg bg-red-600 px-4 py-2 font-medium text-white transition hover:bg-red-700"
-            >
-              Supprimer le cours
-            </button>
-          </form>
-        </section>
+        {formateurDuCours && (
+          <>
+            <section className="mt-10 grid gap-6 md:grid-cols-2">
+              <div className="rounded-2xl border border-slate-200 bg-white p-6">
+                <h2 className="mb-5 text-xl font-bold text-slate-900">
+                  Modifier le cours
+                </h2>
+
+                <CoursUpdateForm cours={cours} />
+              </div>
+
+              <div className="rounded-2xl border border-red-200 bg-white p-6">
+                <h2 className="font-bold text-slate-900">
+                  Supprimer le cours
+                </h2>
+
+                <p className="mt-2 text-sm text-slate-500">
+                  Cette action supprimera définitivement le cours.
+                </p>
+
+                <form action={deleteCours} className="mt-5">
+                  <input
+                    type="hidden"
+                    name="id"
+                    value={cours.id}
+                  />
+
+                  <button
+                    type="submit"
+                    className="rounded-lg bg-red-600 px-4 py-2.5 font-semibold text-white hover:bg-red-700"
+                  >
+                    Supprimer
+                  </button>
+                </form>
+              </div>
+            </section>
+
+            <section className="mt-10 rounded-2xl border border-slate-200 bg-white p-6">
+              <h2 className="mb-5 text-xl font-bold text-slate-900">
+                Ajouter une leçon
+              </h2>
+
+              <LeconForm coursId={cours.id} />
+            </section>
+          </>
+        )}
 
         <section className="mt-10">
-          <h2 className="mb-5 text-2xl font-semibold">
-            Ajouter une leçon
-          </h2>
-
-          <LeconForm coursId={cours.id} />
-        </section>
-
-        <section className="mt-10">
-          <div className="mb-6">
-            <h2 className="text-2xl font-semibold">
+          <div className="mb-5">
+            <h2 className="text-2xl font-bold text-slate-900">
               Leçons
             </h2>
 
-            <p className="mt-1 text-sm text-slate-400">
+            <p className="mt-1 text-sm text-slate-500">
               {cours.lecons.length} leçon(s)
             </p>
           </div>
 
           {cours.lecons.length === 0 ? (
-            <div className="rounded-xl border border-slate-800 bg-slate-900 p-8 text-center">
-              <p className="text-slate-400">
+            <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center">
+              <p className="text-slate-500">
                 Aucune leçon pour ce cours.
               </p>
             </div>
           ) : (
             <div className="space-y-4">
               {cours.lecons.map((lecon) => (
-                <article
+                <div
                   key={lecon.id}
-                  className="flex flex-col justify-between gap-4 rounded-xl border border-slate-800 bg-slate-900 p-5 sm:flex-row sm:items-center"
+                  className="rounded-2xl border border-slate-200 bg-white p-6"
                 >
-                  <div>
-                    <p className="text-sm text-purple-400">
-                      Leçon {lecon.ordre}
-                    </p>
+                  <p className="text-sm font-semibold text-purple-600">
+                    Leçon {lecon.ordre}
+                  </p>
 
-                    <h3 className="mt-1 text-lg font-semibold text-white">
-                      {lecon.titre}
-                    </h3>
-                  </div>
+                  <h3 className="mt-1 text-xl font-bold text-slate-900">
+                    {lecon.titre}
+                  </h3>
 
                   <Link
                     href={`/cours/${cours.id}/lecons/${lecon.id}`}
-                    className="inline-block rounded-lg border border-purple-500 px-4 py-2 text-center text-sm font-medium text-purple-300 transition hover:bg-purple-600 hover:text-white"
+                    className="mt-4 inline-block rounded-lg bg-purple-600 px-4 py-2.5 font-semibold text-white hover:bg-purple-700"
                   >
                     Voir la leçon
                   </Link>
-                </article>
+                </div>
               ))}
             </div>
           )}

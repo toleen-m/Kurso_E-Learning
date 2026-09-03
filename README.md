@@ -6,7 +6,7 @@
 
     git clone https://github.com/toleen-m/Kurso_E-Learning.git
 
-    cd backend
+    cd kurso-e-learning
 
 Installation des dépendances:
 

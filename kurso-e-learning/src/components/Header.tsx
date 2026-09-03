@@ -14,6 +14,11 @@ export function Header() {
                     <Link href="/cours" className="text-slate-300 hover:text-white transition">
                         Cours
                     </Link>
+
+                    <Link href="/profile" className="text-slate-300 hover:text-white transition">
+                        Profile
+                    </Link>
+
                     <Show when="signed-out">
                         <SignInButton mode="modal">
                             <button className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition">

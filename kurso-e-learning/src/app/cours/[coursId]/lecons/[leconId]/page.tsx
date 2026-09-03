@@ -105,39 +105,10 @@ export default async function LeconPage({ params }: Props) {
             </p>
           </div>
 
-          {lecon.quiz.length === 0 ? (
-            <div className="rounded-xl border border-slate-800 bg-slate-900 p-8 text-center">
-              <p className="text-slate-400">
-                Aucun quiz pour cette leçon.
-              </p>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {lecon.quiz.map((quiz) => (
-                <article
-                  key={quiz.id}
-                  className="flex flex-col justify-between gap-4 rounded-xl border border-slate-800 bg-slate-900 p-5 sm:flex-row sm:items-center"
-                >
-                  <div>
-                    <p className="text-sm text-purple-400">
-                      Quiz
-                    </p>
-
-                    <h3 className="mt-1 text-lg font-semibold text-white">
-                      {quiz.titre}
-                    </h3>
-                  </div>
-
-                  <Link
-                    href={`/cours/${coursId}/lecons/${leconId}/quiz/${quiz.id}`}
-                    className="inline-block rounded-lg border border-purple-500 px-4 py-2 text-center text-sm font-medium text-purple-300 transition hover:bg-purple-600 hover:text-white"
-                  >
-                    Voir le quiz
-                  </Link>
-                </article>
-              ))}
-            </div>
-          )}
+          <Link href={`/cours/${coursId}/lecons/${leconId}/quiz`}
+              className="inline-block rounded-lg border border-purple-500 px-4 py-2 text-center text-sm font-medium text-purple-300 transition hover:bg-purple-600 hover:text-white">
+              Voir les quizs
+          </Link>
         </section>
       </div>
     </main>

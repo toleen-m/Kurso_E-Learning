@@ -11,14 +11,14 @@ type Props = {
 
 export default function LeconUpdateForm({ lecon }: Props) {
   return (
-    <form action={updateLecon}>
+    <form action={updateLecon} className="form-container">
       <input
         type="hidden"
         name="id"
         value={lecon.id}
       />
 
-      <div>
+      <div className="form-group">
         <label htmlFor="titre">Titre</label>
         <input
           id="titre"
@@ -29,7 +29,7 @@ export default function LeconUpdateForm({ lecon }: Props) {
         />
       </div>
 
-      <div>
+      <div className="form-group">
         <label htmlFor="contenu">Contenu</label>
         <textarea
           id="contenu"
@@ -39,7 +39,7 @@ export default function LeconUpdateForm({ lecon }: Props) {
         />
       </div>
 
-      <div>
+      <div className="form-group">
         <label htmlFor="ordre">Ordre</label>
         <input
           id="ordre"

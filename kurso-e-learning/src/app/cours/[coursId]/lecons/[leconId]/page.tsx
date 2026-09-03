@@ -120,25 +120,11 @@ export default async function LeconPage({ params }: Props) {
               </p>
             </div>
           ) : (
-            <div className="space-y-4">
-              {lecon.quiz.map((quiz) => (
-                <div
-                  key={quiz.id}
-                  className="rounded-2xl border border-slate-200 bg-white p-6"
-                >
-                  <p className="text-sm font-semibold text-purple-600">
-                    Quiz
-                  </p>
-
-                  <h3 className="mt-1 text-xl font-bold text-slate-900">
-                    {quiz.titre}
-                  </h3>
-
                   <Link
-                    href={`/cours/${coursId}/lecons/${leconId}/quiz/${quiz.id}`}
+                    href={`/cours/${coursId}/lecons/${leconId}/quiz/`}
                     className="mt-4 inline-block rounded-lg bg-purple-600 px-4 py-2.5 font-semibold text-white hover:bg-purple-700"
                   >
-                    Voir le quiz
+                    Voir les quiz
                   </Link>
                 </div>
               ))}

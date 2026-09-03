@@ -15,7 +15,6 @@ export default async function QuizPage({ params }:  {params: Promise<{coursId: s
         );
     }
     
-
     // chercher lecon et son cours
     const lecon = await prisma.lecon.findUnique({
         where: {
@@ -54,6 +53,36 @@ export default async function QuizPage({ params }:  {params: Promise<{coursId: s
 
     // verifier formateur du cours = utilisateur
     const formateurDuCours = lecon.cours.formateurId === utilisateur.id;
+
+
+    const inscription = await prisma.inscription.findUnique({ 
+        where: { 
+            utilisateurId_coursId: { 
+                utilisateurId: utilisateur.id, 
+                coursId: coursId, 
+            }
+        }
+    }); 
+    // verifier si l'utilisateur est inscrit ou est le formateur du cours
+    if (!formateurDuCours && !inscription) { 
+        return ( 
+            <main className="min-h-screen bg-slate-50 p-8"> 
+                <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-sm border border-slate-200 p-8 text-center"> 
+                    
+                    <h1 className="text-2xl font-bold text-red-600"> 
+                        Accès refusé 
+                    </h1> 
+                    <p className="text-slate-500 mt-3">
+                        Vous devez être inscrit à ce cours pour accéder aux quiz. 
+                    </p> 
+                    
+                    <Link href="/cours" className="inline-block mt-6 bg-purple-600 hover:bg-purple-700 text-white px-5 py-3 rounded-lg transition" > 
+                        Voir les cours 
+                    </Link> 
+                </div> 
+            </main> 
+        ); 
+    }
 
     return (
         <main className="min-h-screen bg-slate-50 py-10 px-4">

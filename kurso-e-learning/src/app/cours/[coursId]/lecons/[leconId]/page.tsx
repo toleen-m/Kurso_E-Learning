@@ -126,9 +126,6 @@ export default async function LeconPage({ params }: Props) {
                   >
                     Voir les quiz
                   </Link>
-                </div>
-              ))}
-            </div>
           )}
         </section>
       </div>

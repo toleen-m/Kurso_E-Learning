@@ -113,6 +113,7 @@ export default async function LeconPage({ params }: Props) {
             </p>
           </div>
 
+<<<<<<< HEAD
           {lecon.quiz.length === 0 ? (
             <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center">
               <p className="text-slate-500">
@@ -144,6 +145,12 @@ export default async function LeconPage({ params }: Props) {
               ))}
             </div>
           )}
+=======
+          <Link href={`/cours/${coursId}/lecons/${leconId}/quiz`}
+              className="inline-block rounded-lg border border-purple-500 px-4 py-2 text-center text-sm font-medium text-purple-300 transition hover:bg-purple-600 hover:text-white">
+              Voir les quizs
+          </Link>
+>>>>>>> origin/main
         </section>
       </div>
     </main>

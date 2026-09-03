@@ -68,3 +68,17 @@ export async function getCurrentUser() {
 
   return existingUser
 }
+
+export async function requireRole(role: "ETUDIANT" | "FORMATEUR" | "ADMIN") {
+  const user = await getCurrentUser()
+
+  if (!user) {
+    throw new Error("Utilisateur non authentifie")
+  }
+
+  if (user.role !== role) {
+    throw new Error("Acces interdit")
+  }
+
+  return user
+}

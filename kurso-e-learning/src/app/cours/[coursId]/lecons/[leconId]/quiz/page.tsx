@@ -14,6 +14,7 @@ export default async function QuizPage({ params }:  {params: Promise<{coursId: s
             <h1 className="text-2xl font-bold text-slate-900"> Vous devez être connecté </h1>
         );
     }
+    
 
     // chercher lecon et son cours
     const lecon = await prisma.lecon.findUnique({
@@ -25,6 +26,11 @@ export default async function QuizPage({ params }:  {params: Promise<{coursId: s
             quiz: {
                 include: {
                     questions: true,
+                    quizFaits: {
+                        where: {
+                            utilisateurId: utilisateur.id
+                        }
+                    }
                 },
                 orderBy: {
                     id: "asc",
@@ -122,7 +128,8 @@ export default async function QuizPage({ params }:  {params: Promise<{coursId: s
                                         </p>
 
                                         <p className="text-slate-500 mt-2">
-                                            <strong className="text-purple-600">Score: </strong>{quiz.score}/5
+                                            <strong className="text-purple-600">Score: </strong>
+                                            {quiz.quizFaits.length > 0 ? `${quiz.quizFaits[0].bonneReponse}/${quiz.quizFaits[0].totalQuestions}` : "Pas encore fait"}
                                         </p>
                                     </div>
 
@@ -133,6 +140,13 @@ export default async function QuizPage({ params }:  {params: Promise<{coursId: s
                                     className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition">
                                     Faire le quiz
                                 </Link>
+
+                                {quiz.quizFaits.length > 0 && (
+                                    <Link href={`/cours/${coursId}/lecons/${leconId}/quiz/${quiz.id}/correction`}
+                                        className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition">
+                                        Voir la correction
+                                    </Link>
+                                )}
 
                                 {/* buttons modifier et supprimer = Formateur */}
                                 {formateurDuCours && (

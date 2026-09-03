@@ -6,39 +6,43 @@ export default async function ProfilPage() {
 
   if (!user) {
     return (
-      <main className="p-8">
-        <h1 className="text-3xl font-bold mb-4">Mon profil</h1>
-        <p>Connectez-vous pour accéder à votre profil.</p>
+      <main className="max-w-3xl mx-auto p-8">
+        <h1 className="text-3xl font-bold mb-4 text-slate-900">Mon profil</h1>
+        <p className="text-slate-500">Connectez-vous pour accéder à votre profil.</p>
       </main>
     )
   }
 
   return (
     <main className="max-w-3xl mx-auto p-8">
-      <h1 className="text-3xl font-bold mb-6">Mon profil</h1>
+      <h1 className="text-3xl font-bold mb-6 text-slate-900">Mon profil</h1>
 
-      <div className="border rounded-xl p-6 mb-8">
-        <h2 className="text-xl font-semibold mb-4">Informations</h2>
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-6">
+        <h2 className="text-xl font-bold text-gray-600 mb-5">Informations</h2>
 
         <div className="space-y-2">
-          <p><strong>Nom :</strong> {user.nom}</p>
-          <p><strong>Email :</strong> {user.email}</p>
-          <p><strong>Rôle :</strong> {user.role}</p>
+          <p className="text-sm text-slate-500"><strong className="text-purple-600">Nom :</strong> {user.nom}</p>
+          <p className="text-sm text-slate-500"><strong className="text-purple-600">Email :</strong> {user.email}</p>
+          <p className="text-sm text-slate-500"><strong className="text-purple-600">Rôle :</strong> {user.role}</p>
         </div>
       </div>
 
       {user.role === "ETUDIANT" && (
-        <div className="border rounded-xl p-6">
-          <h2 className="text-xl font-semibold mb-4">Options étudiant</h2>
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-6">
+          <h2 className="text-xl font-bold text-gray-600 mb-5">Options étudiant</h2>
 
           <div className="space-y-3">
-            <Link href="/cours" className="block text-blue-600 hover:underline">
+            <Link href="/cours" className="block text-purple-600 hover:underline">
               Voir mes cours
+            </Link>
+
+            <Link href="/quiz" className="block text-purple-600 hover:underline">
+              Voir mes quiz
             </Link>
 
             <Link
               href="/demande-formateur"
-              className="block text-blue-600 hover:underline"
+              className="block text-purple-600 hover:underline"
             >
               Demander à devenir formateur
             </Link>
@@ -47,17 +51,17 @@ export default async function ProfilPage() {
       )}
 
       {user.role === "FORMATEUR" && (
-        <div className="border rounded-xl p-6">
-          <h2 className="text-xl font-semibold mb-4">Options formateur</h2>
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-6">
+          <h2 className="text-xl font-bold text-gray-600 mb-5">Options formateur</h2>
 
           <div className="space-y-3">
-            <Link href="/cours" className="block text-blue-600 hover:underline">
+            <Link href="/cours" className="block text-purple-600 hover:underline">
               Mes cours créés
             </Link>
 
             <Link
-              href="/newCours"
-              className="block text-blue-600 hover:underline"
+              href="/cours"
+              className="block text-purple-600 hover:underline"
             >
               Créer un cours
             </Link>
@@ -66,15 +70,28 @@ export default async function ProfilPage() {
       )}
 
       {user.role === "ADMIN" && (
-        <div className="border rounded-xl p-6">
-          <h2 className="text-xl font-semibold mb-4">Administration</h2>
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-6">
+          <h2 className="text-xl font-bold text-gray-600 mb-5">Administration</h2>
 
-          <Link
-            href="/admin/demandes"
-            className="block text-blue-600 hover:underline"
-          >
-            Gérer les demandes de formateur
-          </Link>
+            <div className="space-y-3">
+                <Link href="/cours" className="block text-purple-600 hover:underline">
+                    Mes cours créés
+                </Link>
+
+                <Link
+                    href="/cours"
+                    className="block text-purple-600 hover:underline"
+                >
+                    Créer un cours
+                </Link>
+
+                <Link
+                    href="/admin/demandes"
+                    className="block text-purple-600 hover:underline"
+                >
+                    Gérer les demandes de formateur
+                </Link>
+            </div>
         </div>
       )}
     </main>

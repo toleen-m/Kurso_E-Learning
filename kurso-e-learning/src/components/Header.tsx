@@ -16,7 +16,7 @@ export function Header() {
                     </Link>
 
                     <Link href="/profile" className="text-slate-300 hover:text-white transition">
-                        Profile
+                        Profil
                     </Link>
 
                     <Show when="signed-out">

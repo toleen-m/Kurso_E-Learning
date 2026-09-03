@@ -1,6 +1,10 @@
 import Link from "next/link"
-import { getCoursById } from "@/actions/cours.actions"
+import {
+  deleteCours,
+  getCoursById,
+} from "@/actions/cours.actions"
 import LeconForm from "@/components/LeconForm"
+import CoursUpdateForm from "@/components/CoursUpdateForm"
 
 type Props = {
   params: Promise<{
@@ -26,14 +30,33 @@ export default async function CoursDetailPage({ params }: Props) {
       <Link href="/cours">← Retour aux cours</Link>
 
       <h1>{cours.titre}</h1>
-
       <p>{cours.description}</p>
       <p>Niveau : {cours.niveau}</p>
       <p>Formateur : {cours.formateur.nom}</p>
 
-      <h2>Leçons</h2>
+      <h2>Modifier le cours</h2>
+
+      <CoursUpdateForm cours={cours} />
+
+      <h2>Supprimer le cours</h2>
+
+      <form action={deleteCours}>
+        <input
+          type="hidden"
+          name="id"
+          value={cours.id}
+        />
+
+        <button type="submit">
+          Supprimer le cours
+        </button>
+      </form>
+
+      <h2>Ajouter une leçon</h2>
 
       <LeconForm coursId={cours.id} />
+
+      <h2>Leçons</h2>
 
       {cours.lecons.length === 0 ? (
         <p>Aucune leçon pour ce cours.</p>

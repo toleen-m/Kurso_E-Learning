@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { getCours } from "@/actions/cours.actions"
+import CoursForm from "@/components/CoursForm"
 
 export default async function CoursPage() {
   const cours = await getCours()
@@ -7,6 +8,10 @@ export default async function CoursPage() {
   return (
     <main>
       <h1>Liste des cours</h1>
+
+      <h2>Créer un cours</h2>
+
+      <CoursForm />
 
       {cours.length === 0 ? (
         <p>Aucun cours disponible.</p>

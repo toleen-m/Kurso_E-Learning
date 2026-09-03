@@ -4,6 +4,11 @@ import Link from "next/link"
 import prisma from "@/lib/prisma"
 
 export default async function Home() {
+   const clerkUser = await currentUser()
+
+  if (clerkUser) {
+    await syncUser()
+  }
 
   const cours = await prisma.cours.findMany({ 
     orderBy: { 

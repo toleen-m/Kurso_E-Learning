@@ -43,7 +43,7 @@ export default async function ProfilPage() {
               Voir mes cours
             </Link>
 
-            <Link href="/quiz" className="block text-purple-600 hover:underline">
+            <Link href="/profile/mesQuiz" className="block text-purple-600 hover:underline">
               Voir mes quiz
             </Link>
 
@@ -71,6 +71,15 @@ export default async function ProfilPage() {
           <h2 className="text-xl font-bold text-gray-600 mb-5">Options formateur</h2>
 
           <div className="space-y-3">
+
+            <Link href="/cours" className="block text-purple-600 hover:underline">
+              Voir mes cours
+            </Link>
+
+            <Link href="/profile/mesQuiz" className="block text-purple-600 hover:underline">
+              Voir mes quiz
+            </Link>
+
             <Link href="/cours" className="block text-purple-600 hover:underline">
               Mes cours créés
             </Link>
@@ -90,6 +99,15 @@ export default async function ProfilPage() {
           <h2 className="text-xl font-bold text-gray-600 mb-5">Administration</h2>
 
             <div className="space-y-3">
+
+                <Link href="/cours" className="block text-purple-600 hover:underline">
+                    Voir mes cours
+                </Link>
+
+                <Link href="/profile/mesQuiz" className="block text-purple-600 hover:underline">
+                    Voir mes quiz
+                </Link>
+                
                 <Link href="/cours" className="block text-purple-600 hover:underline">
                     Mes cours créés
                 </Link>
@@ -101,10 +119,7 @@ export default async function ProfilPage() {
                     Créer un cours
                 </Link>
 
-                <Link
-                    href="/admin/demandes"
-                    className="block text-purple-600 hover:underline"
-                >
+                <Link href="/profile/gererDemandes" className="block text-purple-600 hover:underline">
                     Gérer les demandes de formateur
                 </Link>
             </div>

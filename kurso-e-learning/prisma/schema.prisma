@@ -51,6 +51,7 @@ model Utilisateur {
   inscriptions     Inscription[]
   coursPublies     Cours[]
   demandeFormateur DemandeFormateur[]
+  leconsTerminees  LeconTerminee[]
 }
 
 model DemandeFormateur {
@@ -113,6 +114,7 @@ model Lecon {
   cours   Cours  @relation(fields: [coursId], references: [id], onDelete: Cascade)
 
   quiz Quiz[]
+  leconsTerminees LeconTerminee[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -141,4 +143,14 @@ model Question {
 
   quizId String
   quiz   Quiz   @relation(fields: [quizId], references: [id], onDelete: Cascade)
+}
+
+model LeconTerminee {
+  id String @id @default(cuid())
+  utilisateurId String
+  utilisateur   Utilisateur @relation(fields: [utilisateurId], references: [id], onDelete: Cascade)
+  leconId String
+  lecon   Lecon  @relation(fields: [leconId], references: [id], onDelete: Cascade)
+  termineeLe DateTime @default(now())
+  @@unique([utilisateurId, leconId])
 }

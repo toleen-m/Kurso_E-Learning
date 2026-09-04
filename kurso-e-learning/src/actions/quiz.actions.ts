@@ -39,7 +39,6 @@ export async function createQuiz(formData: FormData) {
         data:{
             titre: titre,
             leconId: leconId,
-            score: 0,
 
             questions: {
                 create: data.results.map((question: any ) => ({
@@ -157,4 +156,67 @@ export async function deleteQuiz(formData: FormData) {
     revalidatePath(`/cours/${quiz.lecon.coursId}/lecons/${quiz.leconId}/quiz`); 
     redirect(`/cours/${quiz.lecon.coursId}/lecons/${quiz.leconId}/quiz`);
 
+}
+
+
+
+export async function submitQuiz(formData: FormData) { 
+    const quizId = formData.get("quizId") as string; 
+    
+    if (!quizId) throw new Error("Quiz introuvable.");
+
+    const utilisateur = await getCurrentUser();
+    if (!utilisateur) throw new Error("Vous n'etes pas connecter");
+    
+    const quiz = await prisma.quiz.findUnique({ 
+        where: { 
+            id: quizId, 
+        }, 
+        include: { 
+            questions: true, 
+            lecon: { 
+                include: { 
+                    cours: true, 
+                }
+            }
+        }
+    }); 
+    
+    if (!quiz) throw new Error("Quiz introuvable."); 
+    
+    let bonnesReponses = 0; 
+    for (const question of quiz.questions) { 
+        const reponsesUtilisateur = formData.get(question.id); 
+        
+        if ( reponsesUtilisateur === question.bonneReponse ) { 
+            bonnesReponses++; 
+        } 
+    } 
+    
+    const totalQuestions = quiz.questions.length;
+    const score = totalQuestions > 0 ? (bonnesReponses / totalQuestions) * 100 : 0;
+    
+    await prisma.quizFait.upsert({
+        where: {
+            utilisateurId_quizId: {
+                utilisateurId: utilisateur.id,
+                quizId: quiz.id,
+            },
+        },
+        update: {
+            score: score,
+            bonneReponse: bonnesReponses,
+            totalQuestions: totalQuestions,
+        },
+        create: {
+            utilisateurId: utilisateur.id,
+            quizId: quiz.id,
+            score: score,
+            bonneReponse: bonnesReponses,
+            totalQuestions: totalQuestions,
+        },
+    });
+    
+    revalidatePath( `/cours/${quiz.lecon.coursId}/lecons/${quiz.leconId}/quiz` ); 
+    redirect( `/cours/${quiz.lecon.coursId}/lecons/${quiz.leconId}/quiz`); 
 }

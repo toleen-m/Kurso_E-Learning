@@ -52,6 +52,8 @@ model Utilisateur {
   coursPublies     Cours[]
   demandeFormateur DemandeFormateur[]
   leconsTerminees  LeconTerminee[]
+
+  quizFaits QuizFait[]
 }
 
 model DemandeFormateur {
@@ -126,13 +128,33 @@ model Lecon {
 model Quiz {
   id    String @id @default(cuid())
   titre String
-  score Float  @default(0)
 
   //relier le quiz à sa leçon
   leconId String
   lecon   Lecon  @relation(fields: [leconId], references: [id], onDelete: Cascade)
 
   questions Question[]
+
+  quizFaits QuizFait[]
+
+}
+
+model QuizFait{
+  id    String @id @default(cuid())
+  score Float
+  bonneReponse    Int
+  totalQuestions  Int
+
+  utilisateurId   String
+  utilisateur     Utilisateur @relation(fields: [utilisateurId], references: [id], onDelete: Cascade)
+
+  quizId    String
+  quiz      Quiz  @relation(fields: [quizId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([utilisateurId, quizId])
 }
 
 model Question {

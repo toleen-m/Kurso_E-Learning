@@ -26,7 +26,7 @@ export async function createLecon(formData: FormData) {
     throw new Error("Utilisateur non authentifié")
   }
 
-  if (utilisateur.role !== "FORMATEUR") {
+  if (utilisateur.role == "ETUDIANT") {
     throw new Error("Seul un formateur peut créer une leçon")
   }
 
@@ -74,7 +74,7 @@ export async function updateLecon(formData: FormData) {
     throw new Error("Utilisateur non authentifié")
   }
 
-  if (utilisateur.role !== "FORMATEUR") {
+  if (utilisateur.role == "ETUDIANT") {
     throw new Error("Seul un formateur peut modifier une leçon")
   }
 
@@ -128,7 +128,7 @@ export async function deleteLecon(formData: FormData) {
     throw new Error("Utilisateur non authentifié")
   }
 
-  if (utilisateur.role !== "FORMATEUR") {
+  if (utilisateur.role == "ETUDIANT") {
     throw new Error("Seul un formateur peut supprimer une leçon")
   }
 

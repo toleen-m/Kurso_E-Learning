@@ -82,10 +82,6 @@ export default async function ProfilPage({
 
           <div className="space-y-3">
 
-            <Link href="/cours" className="block text-purple-600 hover:underline">
-              Voir mes cours
-            </Link>
-
             <Link href="/profile/mesQuiz" className="block text-purple-600 hover:underline">
               Voir mes quiz
             </Link>
@@ -109,10 +105,6 @@ export default async function ProfilPage({
           <h2 className="text-xl font-bold text-gray-600 mb-5">Administration</h2>
 
             <div className="space-y-3">
-
-                <Link href="/cours" className="block text-purple-600 hover:underline">
-                    Voir mes cours
-                </Link>
 
                 <Link href="/profile/mesQuiz" className="block text-purple-600 hover:underline">
                     Voir mes quiz

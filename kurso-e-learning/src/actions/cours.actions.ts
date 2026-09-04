@@ -48,7 +48,7 @@ export async function createCours(formData: FormData) {
     throw new Error("Utilisateur non authentifié")
   }
 
-  if (user.role !== "FORMATEUR") {
+  if (user.role == "ETUDIANT") {
     throw new Error("Seul un formateur peut créer un cours")
   }
 
@@ -93,7 +93,7 @@ export async function updateCours(formData: FormData) {
     throw new Error("Utilisateur non authentifié")
   }
 
-  if (user.role !== "FORMATEUR") {
+  if (user.role == "ETUDIANT") {
     throw new Error("Seul un formateur peut modifier un cours")
   }
 
@@ -145,7 +145,7 @@ export async function deleteCours(formData: FormData) {
     throw new Error("Utilisateur non authentifié")
   }
 
-  if (user.role !== "FORMATEUR") {
+  if (user.role == "ETUDIANT") {
     throw new Error("Seul un formateur peut supprimer un cours")
   }
 

@@ -79,6 +79,24 @@ export default async function CorrectionPage({ params }: { params: Promise<{ cou
         ); 
     }
 
+    //verifier si l'utilisateur a fait le quiz
+    const quizFait = await prisma.quizFait.findFirst({ 
+        where: { 
+            quizId: quizId, 
+            utilisateurId: utilisateur.id 
+        }, 
+    }); 
+    if (!formateurDuCours && !quizFait) { 
+        return ( 
+            <main className="min-h-screen bg-slate-50 p-8"> 
+                <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-sm border border-slate-200 p-8 text-center"> 
+                    <h1 className="text-2xl font-bold text-yellow-600"> Quiz non terminé </h1> 
+                    <p className="text-slate-500 mt-3"> Vous devez d'abord faire et soumettre ce quiz avant de voir la correction. </p> 
+                    <Link href={`/cours/${coursId}/lecons/${leconId}/quiz/${quizId}`} className="inline-block mt-6 bg-purple-600 hover:bg-purple-700 text-white px-5 py-3 rounded-lg transition" > Faire le quiz </Link> 
+                </div> 
+            </main> 
+        ); 
+    } 
 
     return (
         <main className="min-h-screen bg-slate-50 py-12">

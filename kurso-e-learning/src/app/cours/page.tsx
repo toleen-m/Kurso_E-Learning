@@ -7,7 +7,7 @@ export default async function CoursPage() {
   const cours = await getCours()
   const utilisateur = await getCurrentUser()
 
-  const estFormateur = utilisateur?.role === "FORMATEUR"
+  const estFormateurAdmin = utilisateur?.role === "FORMATEUR" || utilisateur?.role === "ADMIN"
 
   return (
     <main className="min-h-screen bg-slate-50 py-12">
@@ -26,7 +26,7 @@ export default async function CoursPage() {
           </p>
         </div>
 
-        {estFormateur && (
+        {estFormateurAdmin && (
           <section className="mt-10 rounded-2xl border border-slate-200 bg-white p-6">
             <h2 className="mb-5 text-xl font-bold text-slate-900">
               Créer un cours

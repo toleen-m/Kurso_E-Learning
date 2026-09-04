@@ -1,10 +1,20 @@
 import { getCurrentUser } from "@/actions/user.actions"
 import Link from "next/link"
+import { getMesInscriptions, seDesinscrire } from "@/actions/inscription.actions"
 import prisma from "@/lib/prisma"
 
-export default async function ProfilPage() {
+export default async function ProfilPage({ 
+  searchParams,
+}: {
+  searchParams: Promise<{ statut?: string; page?: string }>;
+}) {
+  const params = await searchParams
+  const statut = params.statut
+  const page = Number(params.page) || 1
   const utilisateur = await getCurrentUser()
+  const data = await getMesInscriptions(statut, page)
 
+  
   if (!utilisateur) {
     return (
       <main className="max-w-3xl mx-auto p-8">
@@ -125,6 +135,82 @@ export default async function ProfilPage() {
             </div>
         </div>
       )}
+      
+              {/* ---------- Mes cours inscrits ---------- */}
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-6">
+
+          <h2 className="text-xl font-bold text-gray-600 mb-5">
+            Mes cours inscrits ({data ? data.total : 0})
+          </h2>
+
+          <div className="flex gap-2 mb-5">
+            <Link href="/profile" className="rounded-full bg-slate-200 px-3 py-1 text-sm hover:bg-slate-300">
+              Tous
+            </Link>
+            <Link href="/profile?statut=EN_COURS" className="rounded-full bg-slate-200 px-3 py-1 text-sm hover:bg-slate-300">
+              En cours
+            </Link>
+            <Link href="/profile?statut=TERMINE" className="rounded-full bg-slate-200 px-3 py-1 text-sm hover:bg-slate-300">
+              Terminés
+            </Link>
+          </div>
+
+          {!data || data.inscriptions.length === 0 ? (
+            <p className="text-slate-500">Aucun cours dans cette catégorie.</p>
+          ) : (
+            <ul className="grid gap-4 sm:grid-cols-2">
+              {data.inscriptions.map((inscription) => (
+                <li key={inscription.id} className="rounded-lg border border-slate-200 p-5">
+
+                  <Link href={`/cours/${inscription.coursId}`} className="font-semibold hover:text-purple-600">
+                    {inscription.cours.titre}
+                  </Link>
+
+                  <p className="mt-1 text-sm text-slate-500">
+                    {inscription.cours.formateur.nom} · {inscription.cours.lecons.length} leçon(s)
+                  </p>
+
+                  <div className="mt-4">
+                    <p className="mb-1 text-xs text-slate-500">
+                      Progression : {inscription.progression}% ({inscription.statut})
+                    </p>
+                    <div className="h-2 w-full rounded-full bg-slate-200">
+                      <div
+                        className="h-2 rounded-full bg-purple-600"
+                        style={{ width: `${inscription.progression}%` }}
+                      />
+                    </div>
+                  </div>
+
+                  <form action={seDesinscrire} className="mt-4">
+                    <input type="hidden" name="inscriptionId" value={inscription.id} />
+                    <button type="submit" className="text-sm text-slate-500 underline hover:text-red-600">
+                      Se désinscrire
+                    </button>
+                  </form>
+
+                </li>
+              ))}
+            </ul>
+          )}
+
+          {data && data.pages > 1 && (
+            <div className="mt-6 flex gap-2">
+              {Array.from({ length: data.pages }).map((_, i) => (
+                <Link
+                  key={i}
+                  href={statut ? `/profile?statut=${statut}&page=${i + 1}` : `/profile?page=${i + 1}`}
+                  className="rounded bg-slate-200 px-3 py-1 text-sm hover:bg-slate-300"
+                >
+                  {i + 1}
+                </Link>
+              ))}
+            </div>
+          )}
+
+        </div>
+
     </main>
   )
-}
+
+} 

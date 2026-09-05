@@ -4,6 +4,8 @@ import {
   getCoursById,
 } from "@/actions/cours.actions"
 import { getCurrentUser } from "@/actions/user.actions"
+import { estInscrit } from "@/actions/inscription.actions"
+import { BoutonInscription } from "@/components/BoutonInscription"
 import LeconForm from "@/components/LeconForm"
 import CoursUpdateForm from "@/components/CoursUpdateForm"
 
@@ -29,7 +31,7 @@ export default async function CoursDetailPage({ params }: Props) {
             href="/cours"
             className="mt-5 inline-block text-sm font-medium text-purple-600"
           >
-            ← Retour aux cours
+            &larr; Retour aux cours
           </Link>
         </div>
       </main>
@@ -41,6 +43,12 @@ export default async function CoursDetailPage({ params }: Props) {
   const formateurDuCours =
     utilisateur?.id === cours.formateurId
 
+  // Inscription 
+  const inscription = await estInscrit(coursId)
+
+  
+  const peutConsulter = inscription !== null || formateurDuCours
+
   return (
     <main className="min-h-screen bg-slate-50 py-12">
       <div className="mx-auto max-w-4xl px-4">
@@ -48,7 +56,7 @@ export default async function CoursDetailPage({ params }: Props) {
           href="/cours"
           className="text-sm font-medium text-purple-600"
         >
-          ← Retour aux cours
+          &larr; Retour aux cours
         </Link>
 
         <div className="mt-6 rounded-2xl bg-slate-900 p-8 text-white">
@@ -71,6 +79,13 @@ export default async function CoursDetailPage({ params }: Props) {
           <p className="mt-1 text-sm text-slate-400">
             {cours.lecons.length} leçon(s)
           </p>
+
+          {/* Bouton s'inscrire / se desinscrire */}
+          {!formateurDuCours && (
+            <div className="mt-6">
+              <BoutonInscription coursId={cours.id} />
+            </div>
+          )}
         </div>
 
         {formateurDuCours && (
@@ -152,12 +167,19 @@ export default async function CoursDetailPage({ params }: Props) {
                     {lecon.titre}
                   </h3>
 
-                  <Link
-                    href={`/cours/${cours.id}/lecons/${lecon.id}`}
-                    className="mt-4 inline-block rounded-lg bg-purple-600 px-4 py-2.5 font-semibold text-white hover:bg-purple-700"
-                  >
-                    Voir la leçon
-                  </Link>
+                  
+                  {peutConsulter ? (
+                    <Link
+                      href={`/cours/${cours.id}/lecons/${lecon.id}`}
+                      className="mt-4 inline-block rounded-lg bg-purple-600 px-4 py-2.5 font-semibold text-white hover:bg-purple-700"
+                    >
+                      Voir la leçon
+                    </Link>
+                  ) : (
+                    <p className="mt-4 text-sm text-slate-400">
+                      Inscris-toi au cours pour accéder à cette leçon.
+                    </p>
+                  )}
                 </div>
               ))}
             </div>

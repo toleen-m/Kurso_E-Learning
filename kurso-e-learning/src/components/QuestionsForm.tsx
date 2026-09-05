@@ -28,8 +28,8 @@ export async function QuestionsForm({ params }: { params: Promise<{ coursId: str
                             {reponses.map( (reponse, responseIndex) => ( 
                                 <label key={`${question.id}-${responseIndex}`} 
                                     className="flex cursor-pointer items-center gap-3 rounded-lg border border-slate-200 p-4 transition hover:border-purple-400 hover:bg-purple-50" > 
-                                    <input type="radio" name={question.id} value={reponse} 
-                                        className="h-5 w-5 rounded border-slate-300 text-purple-600 focus:ring-purple-500 required" /> 
+                                    <input type="radio" name={question.id} value={reponse} required
+                                        className="h-5 w-5 rounded border-slate-300 text-purple-600 focus:ring-purple-500" /> 
                                     <span className="text-slate-700"> 
                                         {reponse} 
                                     </span> 

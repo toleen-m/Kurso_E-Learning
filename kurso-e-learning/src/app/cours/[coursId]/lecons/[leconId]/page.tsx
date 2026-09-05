@@ -118,6 +118,13 @@ export default async function LeconPage({ params }: Props) {
               <p className="text-slate-500">
                 Aucun quiz pour cette leçon.
               </p>
+
+              {formateurDuCours && (
+                <Link href={`/cours/${coursId}/lecons/${leconId}/newQuiz`}
+                    className="inline-flex items-center justify-center bg-purple-600 hover:bg-purple-700 text-white font-medium px-5 py-3 rounded-lg transition">
+                    + Créer un quiz
+                </Link>
+              )}
             </div>
           ) : (
                   <Link

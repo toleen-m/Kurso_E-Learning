@@ -6,6 +6,7 @@ import {
 import { getCurrentUser } from "@/actions/user.actions"
 import { estInscrit } from "@/actions/inscription.actions"
 import { BoutonInscription } from "@/components/BoutonInscription"
+import { SuiviLecons } from "@/components/SuiviLecons"
 import LeconForm from "@/components/LeconForm"
 import CoursUpdateForm from "@/components/CoursUpdateForm"
 
@@ -134,6 +135,11 @@ export default async function CoursDetailPage({ params }: Props) {
             </section>
           </>
         )}
+
+        
+        <div className="mt-10">
+          <SuiviLecons coursId={cours.id} />
+        </div>
 
         <section className="mt-10">
           <div className="mb-5">

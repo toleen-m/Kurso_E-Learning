@@ -5,7 +5,7 @@ export function QuizForm({ leconId }: { leconId: string }) {
     <form action={createQuiz} className="space-y-5 rounded-2xl bg-white p-6 shadow-sm border border-slate-200">
         <input type="hidden" name="leconId" value={leconId} />
         <div>
-            <label htmlFor="titre" className="mb-2 block text-sm font-bold text-slate-900">
+            <label htmlFor="titre" className="mb-2 block text-sm font-bold text-slate-900 required">
                 Titre du quiz
             </label>
             <input id="titre" name="titre" placeholder="Ex: Quiz JavaScript" required 

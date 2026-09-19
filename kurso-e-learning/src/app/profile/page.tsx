@@ -49,9 +49,6 @@ export default async function ProfilPage({
           <h2 className="text-xl font-bold text-gray-600 mb-5">Options étudiant</h2>
 
           <div className="space-y-3">
-            <Link href="/cours" className="block text-purple-600 hover:underline">
-              Voir mes cours
-            </Link>
 
             <Link href="/profile/mesQuiz" className="block text-purple-600 hover:underline">
               Voir mes quiz
@@ -86,7 +83,7 @@ export default async function ProfilPage({
               Voir mes quiz
             </Link>
 
-            <Link href="/cours" className="block text-purple-600 hover:underline">
+            <Link href="/profile/mesCoursCrees" className="block text-purple-600 hover:underline">
               Mes cours créés
             </Link>
 
@@ -110,7 +107,7 @@ export default async function ProfilPage({
                     Voir mes quiz
                 </Link>
                 
-                <Link href="/cours" className="block text-purple-600 hover:underline">
+                <Link href="/profile/mesCoursCrees" className="block text-purple-600 hover:underline">
                     Mes cours créés
                 </Link>
 

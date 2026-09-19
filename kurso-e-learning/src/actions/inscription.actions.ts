@@ -41,7 +41,7 @@ export async function sInscrire(formData: FormData) {
 }
 
 
-// ---------- Se désinscrire ----------
+// ---------- Se désinscrire --------
 
 export async function seDesinscrire(formData: FormData) {
 
@@ -55,10 +55,18 @@ export async function seDesinscrire(formData: FormData) {
     });
     if (!inscription) throw new Error("Inscription introuvable.");
 
-    // on ne supprime que sa propre inscription
+    
     if (inscription.utilisateurId !== utilisateur.id) {
         throw new Error("Accès interdit.");
     }
+
+    
+    await prisma.leconTerminee.deleteMany({
+        where: {
+            utilisateurId: utilisateur.id,
+            lecon: { coursId: inscription.coursId },
+        },
+    });
 
     await prisma.inscription.delete({
         where: { id: inscriptionId },
@@ -78,9 +86,18 @@ export async function getMesInscriptions(statut?: string, page: number = 1) {
 
     const parPage = 6;
 
+    
+    const statutsValides = ["EN_COURS", "TERMINE", "ABANDONNE"];
+    const statutFiltre =
+        statut && statutsValides.includes(statut) ? statut : undefined;
+
+    const pageValide = page > 0 ? page : 1;
+
     const filtre = {
         utilisateurId: utilisateur.id,
-        ...(statut ? { statut: statut as "EN_COURS" | "TERMINE" } : {}),
+        ...(statutFiltre
+            ? { statut: statutFiltre as "EN_COURS" | "TERMINE" | "ABANDONNE" }
+            : {}),
     };
 
     const inscriptions = await prisma.inscription.findMany({
@@ -93,7 +110,7 @@ export async function getMesInscriptions(statut?: string, page: number = 1) {
                 },
             },
         },
-        skip: (page - 1) * parPage,
+        skip: (pageValide - 1) * parPage,
         take: parPage,
     });
 
@@ -102,13 +119,13 @@ export async function getMesInscriptions(statut?: string, page: number = 1) {
     return {
         inscriptions: inscriptions,
         total: total,
-        page: page,
+        page: pageValide,
         pages: Math.ceil(total / parPage) || 1,
     };
 }
 
 
-// ---------- Est-ce que l'utilisateur est inscrit à ce cours ? ------
+// ------utilisateur est inscrit à ce cours ou pas ----
 
 export async function estInscrit(coursId: string) {
 
@@ -172,7 +189,7 @@ export async function marquerLeconTerminee(formData: FormData) {
 }
 
 
-// ---------- Calcul de la progression ----------
+// ---------- Calcul de la progression -------
 
 async function calculerProgression(utilisateurId: string, coursId: string) {
 

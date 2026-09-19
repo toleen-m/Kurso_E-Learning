@@ -5,6 +5,7 @@ import {
 } from "@/actions/lecon.actions"
 import { getCurrentUser } from "@/actions/user.actions"
 import LeconUpdateForm from "@/components/LeconUpdateForm"
+import { estInscrit } from "@/actions/inscription.actions"
 
 type Props = {
   params: Promise<{
@@ -40,6 +41,33 @@ export default async function LeconPage({ params }: Props) {
 
   const formateurDuCours =
     utilisateur?.id === lecon.cours.formateurId
+
+  
+  
+  const inscription = await estInscrit(coursId)
+
+  if (!inscription && !formateurDuCours) {
+    return (
+      <main className="min-h-screen bg-slate-50 p-8">
+        <div className="mx-auto max-w-4xl rounded-xl bg-white p-8 text-center shadow">
+          <h1 className="text-2xl font-bold text-slate-900">
+            Acces reserve
+          </h1>
+
+          <p className="mt-3 text-slate-500">
+            Tu dois etre inscrit a ce cours pour consulter cette lecon.
+          </p>
+
+          <Link
+            href={`/cours/${coursId}`}
+            className="mt-5 inline-block text-sm font-medium text-purple-600"
+          >
+            &larr; Retour au cours
+          </Link>
+        </div>
+      </main>
+    )
+  }
 
   return (
     <main className="min-h-screen bg-slate-50 py-12">

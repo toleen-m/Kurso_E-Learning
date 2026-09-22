@@ -9,7 +9,11 @@ import { getCurrentUser } from "./user.actions";
 export async function createQuiz(formData: FormData) {
 
     //api
-    const response = await fetch("http://localhost:3000/api/questions");
+    const baseUrl = process.env.VERCEL_URL
+        ? `https://${process.env.VERCEL_URL}`
+        : "http://localhost:3000";
+
+    const response = await fetch(`${baseUrl}/api/questions`);
     if (!response.ok) {
         throw new Error("Erreur lors de la recuperation des questions");
     }

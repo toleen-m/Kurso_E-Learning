@@ -3,7 +3,7 @@
 import prisma from "@/lib/prisma";
 import { getCurrentUser } from "@/actions/user.actions";
 import { revalidatePath } from "next/cache";
-
+import { redirect } from "next/navigation";
 
 // ---------- S'inscrire à un cours ----------
 
@@ -12,8 +12,7 @@ export async function sInscrire(formData: FormData) {
     const coursId = formData.get("coursId") as string;
 
     const utilisateur = await getCurrentUser();
-    if (!utilisateur) throw new Error("Tu dois être connecté pour t'inscrire.");
-
+    if (!utilisateur) redirect("/sign-in");
     const cours = await prisma.cours.findUnique({
         where: { id: coursId },
     });
@@ -48,7 +47,7 @@ export async function seDesinscrire(formData: FormData) {
     const inscriptionId = formData.get("inscriptionId") as string;
 
     const utilisateur = await getCurrentUser();
-    if (!utilisateur) throw new Error("Tu dois être connecté.");
+    if (!utilisateur) redirect("/sign-in");
 
     const inscription = await prisma.inscription.findUnique({
         where: { id: inscriptionId },
